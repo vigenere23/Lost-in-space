@@ -6,6 +6,10 @@ Projet scolaire réalisé dans le cadre du cours GLO-1901: Introduction à la pr
 
 P.S.: Les images n'étaient pas données, elles ont donc été crée sur Inkscape :)
 
+## Développement
+
+Le développement d'un nouveau serveur est maintenant débuté. À voir sur la branche `new_server`.
+
 ## Problèmes connus
 
 ### Serveur déconnecté
