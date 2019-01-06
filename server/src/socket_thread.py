@@ -4,7 +4,7 @@ import src.game_system as gs
 
 class SocketThread(threading.Thread):
   def __init__(self, s):
-    super()
+    super().__init__()
     self.socket = s
 
   def run(self):
