@@ -5,9 +5,12 @@
 import json
 import argparse
 import pyglet as pg
+import sys
+import os
 
-from scripts.game import Game
-from scripts.glo1901 import ClientReseau
+import common.file_helper as fh
+from .scripts.game import Game
+from .scripts.glo1901 import ClientReseau
 
 
 def init_parser():
@@ -129,7 +132,9 @@ def parse_arguments(args):
 
         data = None
         try:
-            data_file = open("mondes/{}".format(filename))
+            filepath = fh.get_path(__file__, "mondes/{}".format(filename))
+            print(filepath)
+            data_file = open(filepath)
             content = data_file.read()
             data = json.loads(content)
             assert len(data) == 7

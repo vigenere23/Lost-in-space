@@ -11,7 +11,7 @@ class ResponseType(Enum):
   ERROR = 2
 
 
-class Socket:
+class SocketConnection:
   def __init__(self):
     self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -35,7 +35,7 @@ class Socket:
 
   def accept(self):
     s, address = self.__socket.accept()
-    client_socket = Socket()
+    client_socket = SocketConnection()
     client_socket.set_socket(s)
     return (client_socket, address)
 
@@ -58,22 +58,6 @@ class Socket:
   
     self.__socket.sendall(struct.pack('!I', len(data)))
     self.__socket.sendall(data)
-
-
-  def send_error(self, message):
-    response = {
-      "type": ResponseType.ERROR,
-      "message": message
-    }
-    self.send(response)
-
-
-  def send_data(self, data):
-    response = {
-      "type": ResponseType.DATA,
-      "data": data
-    }
-    self.send(response)
 
 
   def __recvall(self, count):

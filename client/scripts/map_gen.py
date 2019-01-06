@@ -2,8 +2,9 @@
 
 import pyglet as pg
 
-import scripts.polytri as polytri
-from scripts.vec2 import Vec2
+import common.file_helper as fh
+from . import polytri
+from .vec2 import Vec2
 
 
 class Map(object):
@@ -106,7 +107,8 @@ class Map(object):
 
     def init_end_point(self, end_point_coords):
         """Créé l'image à la position finale."""
-        image = pg.image.load("./images/death-star.png")
+        image_path = fh.get_path(__file__, "images/death-star.png")
+        image = pg.image.load(image_path)
         image.anchor_x = image.width // 2  # Doit être entier
         image.anchor_y = image.height // 2
         end_point = pg.sprite.Sprite(image, *end_point_coords)

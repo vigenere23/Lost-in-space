@@ -2,9 +2,9 @@
 
 import math
 
-from scripts.ship import Ship
-from scripts.energy_hub import EnergyHub
-from scripts.vec2 import Vec2
+from .ship import Ship
+from .energy_hub import EnergyHub
+from .vec2 import Vec2
 
 
 class PlayerShip(Ship):

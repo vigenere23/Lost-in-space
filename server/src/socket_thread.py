@@ -1,5 +1,5 @@
 import threading
-import src.game_system as gs
+from . import game_system as gs
 
 
 class SocketThread(threading.Thread):

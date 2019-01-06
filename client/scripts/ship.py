@@ -1,7 +1,7 @@
 """Définition de la classe Ship."""
 import pyglet as pg
 
-from scripts.vec2 import Vec2
+from .vec2 import Vec2
 
 
 class Ship(pg.sprite.Sprite):

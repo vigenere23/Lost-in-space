@@ -1,9 +1,9 @@
-from src.socket_connection import SocketConnection
-from src.socket_thread import SocketThread
+from .src.socket_thread import SocketThread
+from .src.server_connection import ServerConnection
 
 
 def main():
-  serversocket = SocketConnection()
+  serversocket = ServerConnection()
   serversocket.listen()
 
   while True:
