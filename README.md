@@ -6,6 +6,22 @@ Projet scolaire réalisé dans le cadre du cours GLO-1901: Introduction à la pr
 
 P.S.: Les images n'étaient pas données, elles ont donc été crée sur Inkscape :)
 
+## Execution examples
+
+Go to the project's root folder. Then : 
+
+### Server
+
+```bash
+python -m server.server
+```
+
+### Client
+
+```bash
+python -m client.perdu test --serveur localhost --port 1234 --créer 1 monde2.json
+```
+
 ## Développement
 
 Le développement d'un nouveau serveur est maintenant débuté. À voir sur la branche `new_server`.
