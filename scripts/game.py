@@ -34,7 +34,7 @@ class Game(pg.window.Window):
 
     def __init__(
             self,
-            client, pseudo, players,
+            client, pseudo, host, players,
             start_pos, end_pos,
             obstacles, *ship_params,
             animate=False,
@@ -50,6 +50,7 @@ class Game(pg.window.Window):
 
         self.__client = client
         self.__pseudo = pseudo
+        self.__host = host
         self.__animate = animate
         self.__slow = slow
         self.__fps = fps
@@ -180,7 +181,9 @@ class Game(pg.window.Window):
             try:
                 self.__server_timer.reset()
                 rapport = self.__client.rapporter(
-                    *self.__player_ship.get_status())
+                    self.__host,
+                    self.__player_ship.pseudo,
+                    self.__player_ship.get_status())
                 assert rapport is not None
 
             except AssertionError:
@@ -194,8 +197,8 @@ commande --ralentir""".format(time))
                 self.exit()
                 return
 
-            if rapport.get("gagnant"):
-                self.__win_handler.set_winner(rapport["gagnant"])
+            if rapport.get("winner"):
+                self.__win_handler.set_winner(rapport["winner"])
                 return
 
             for player, ship in self.__other_ships.items():

@@ -165,7 +165,14 @@ def parse_arguments(args):
 
         game_params = data
         print("\nEn attente de joueurs...")
-        players = client.creer(player_number, game_params)["joueurs"]
+
+        response = client.creer(player_number, game_params)
+        print("Response:")
+        if response.get("data"):
+            print("received data...")
+            data = response["data"]
+            if data.get("players"):
+                print(players)
 
     start_game(client, game_params, players, args)
 
@@ -175,6 +182,7 @@ def start_game(client, game_params, players, args):
     print("\n\nQUE LA PARTIE COMMENCE!")
     game = Game(client,
                 args.joueur,
+                players[0],
                 players,
                 *game_params,
                 animate=args.animer,

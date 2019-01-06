@@ -26,6 +26,7 @@ class Ship(pg.sprite.Sprite):
         self.rotation = -90
         self.scale = 0.25
         self._velocity = Vec2()
+        self.pseudo = pseudo
         if len(pseudo) > 10:
             pseudo = pseudo[:10] + "..."
         self.label = pg.text.Label(pseudo,

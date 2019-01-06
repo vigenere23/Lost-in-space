@@ -33,10 +33,12 @@ class ClientReseau(object):
         :returns: un dictionnaire contenant une clé 'joueurs' à laquelle
         est associée un tuple de pseudonymes de joueur.
         """
-        requete = {"requête": "créer",
-                   "pseudonyme": self.pseudonyme,
-                   "joueurs": nombre_joueurs,
-                   "mission": mission}
+        requete = {
+            "command": "create",
+            "host": self.pseudonyme,
+            "nb_players": nombre_joueurs,
+            "mission": mission
+        }
 
         self.__envoyer(requete)
         return self.__recevoir_sync()
@@ -48,7 +50,7 @@ class ClientReseau(object):
         créateurs des parties en attente et les valeurs le nombre de places
         disponibles.
         """
-        requete = {"requête": "lister"}
+        requete = {"command": "list"}
 
         self.__envoyer(requete)
         return self.__recevoir_sync()
@@ -62,14 +64,14 @@ class ClientReseau(object):
             - 'joueurs' : la liste de noms de joueurs membres de la partie;
             - 'mission' : tuple des paramètres de la mission.
         """
-        requete = {"requête": "joindre",
-                   "partie": hote,
-                   "pseudonyme": self.pseudonyme}
+        requete = {"command": "join",
+                   "host": hote,
+                   "player": self.pseudonyme}
 
         self.__envoyer(requete)
         return self.__recevoir_sync()
 
-    def rapporter(self, position, vitesse, orientation):
+    def rapporter(self, host, pseudo, statut):
         """Rapporte au serveur l'état de notre vaisseau.
 
         :param position: sequence de deux nombres correspondant à la position
@@ -84,8 +86,12 @@ class ClientReseau(object):
         La fonction peut aussi retourner None si aucune réponse n'a été obtenue
         à temps du serveur de jeu.
         """
-        requete = {"requête": "rapporter",
-                   "état": (position, vitesse, orientation)}
+        requete = {
+            "command": "update",
+            "host": host,
+            "player": pseudo,
+            "status": statut
+        }
 
         self.__envoyer(requete)
         return self.__recevoir_async()
