@@ -9,8 +9,8 @@ import sys
 import os
 
 import common.file_helper as fh
+from .scripts.client_connection import ClientConnection
 from .scripts.game import Game
-from .scripts.glo1901 import ClientReseau
 
 
 def init_parser():
@@ -95,7 +95,8 @@ def parse_arguments(args):
     if len(args.joueur) > 12:
         args.joueur = "{}...".format(args.joueur[:12])
 
-    client = ClientReseau(args.joueur, args.serveur, args.port)
+    client = ClientConnection(args.joueur)
+    client.connect(args.serveur, args.port)
     game_params = None
     players = None
 
@@ -132,8 +133,7 @@ def parse_arguments(args):
 
         data = None
         try:
-            filepath = fh.get_path(__file__, "mondes/{}".format(filename))
-            print(filepath)
+            filepath = fh.get_path("client/mondes/{}".format(filename))
             data_file = open(filepath)
             content = data_file.read()
             data = json.loads(content)
@@ -177,9 +177,8 @@ def parse_arguments(args):
             print("received data...")
             data = response["data"]
             if data.get("players"):
-                print(players)
-
-    start_game(client, game_params, players, args)
+                print(data["players"])
+                start_game(client, game_params, data["players"], args)
 
 
 def start_game(client, game_params, players, args):

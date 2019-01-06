@@ -28,8 +28,6 @@ def add_player(socket, host, username):
   _players[socket] = player
   game.players.append(player)
 
-  print("IS GAME FULL? {}".format(game.is_full()))
-
   if game.is_full():
     player_list = game.get_players()
     data = {

@@ -9,7 +9,7 @@ class SocketThread(threading.Thread):
 
   def run(self):
     while True:
-      data = self.socket.recv()
+      data = self.socket.recv_obj()
 
       if not data:
         # remove user from game
@@ -24,27 +24,27 @@ class SocketThread(threading.Thread):
       print("Received command '{}'".format(command))
 
       if command == "create":
-        self.create(command)
+        self.create(data)
       elif command == "join":
-        self.join(command)
+        self.join(data)
       elif command == "list":
-        self.list_games(command)
+        self.list_games(data)
 
     self.socket.close()
 
-  def create(self, command):
-    if not command.get("host"):
+  def create(self, data):
+    if not data.get("host"):
       self.socket.send_error("A host must be specified")
-    elif not command.get("nb_players"):
+    elif not data.get("nb_players"):
       self.socket.send_error("The numbers of players is required")
-    elif not command.get("mission"):
+    elif not data.get("mission"):
       self.socket.send_error("A mission file is required")
     
-    print("Creating new game hosted by '{}'".format(command["host"]))
-    gs.new_game(self.socket, command["host"], command["nb_players"], command["mission"])
+    print("Creating new game hosted by '{}'".format(data["host"]))
+    gs.new_game(self.socket, data["host"], data["nb_players"], data["mission"])
 
-  def join(self, command):
+  def join(self, data):
     pass
 
-  def list_games(self, command):
+  def list_games(self, data):
     pass

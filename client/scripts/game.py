@@ -90,7 +90,7 @@ class Game(pg.window.Window):
         other_ships = {}
 
         for i, player in enumerate(players):
-            image_path = fh.get_path(__file__, "images/ship{}.png".format(i + 1))
+            image_path = fh.get_path("client/images/ship{}.png".format(i + 1))
             if player != self.__pseudo:
                 other_ships[player] = Ship(
                     player, image_path, *start_pos)
@@ -108,7 +108,7 @@ class Game(pg.window.Window):
         pyglet.sprite.Sprite()
             Sprite du fonc d'écran.
         """
-        bg_path = fh.get_path(__file__, "images/space.jpg")
+        bg_path = fh.get_path("client/images/space.jpg")
         bg_image = pg.image.load(bg_path)
         bg_image.anchor_x = bg_image.width // 2
         bg_image.anchor_y = bg_image.height // 2

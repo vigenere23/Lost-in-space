@@ -29,3 +29,9 @@ Les serveur maintenant déconnectés, il n'est malheureusement plus possible de 
 ### Serveur maison
 
 Afin de contourner la problématique du serveur, il serait également possible d'en créer un sois-même et de l'implenter au sein du jeu. Il deviendrait donc entièrement portable et indépendant. 
+
+## TODO
+
+* Responding to ship status update
+* Deleting server game and terminating thread when game has finished
+* Implementing the "join" command
