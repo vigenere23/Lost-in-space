@@ -41,7 +41,7 @@ class WinHandler(object):
             y=self.__pos_y + 20)
 
         self.__press_any_keys_text = pg.text.Label(
-            "(Appuyez sur n'importe quelle touche pour fermer...)",
+            "(Appuyez sur ENTER pour fermer...)",
             font_size=12,
             anchor_x='center',
             anchor_y='center',

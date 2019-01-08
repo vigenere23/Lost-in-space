@@ -180,7 +180,7 @@ class Game(pg.window.Window):
             self.update_winner(rapport)
             self.update_positions(rapport)
         else:
-            if self.__keys.keys_pressed():
+            if self.__keys[key.ENTER]:
                 self.exit()
 
     def update_server(self):
