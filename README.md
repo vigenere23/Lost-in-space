@@ -1,50 +1,42 @@
-# Perdu dans l'espace
+# Lost in space
 
-## À propos
+This project was made as a school project for the course GLO-1901 : Introduction to programmation using Python. The goal is to control a small spaceship and reach the end (identified by a Death-Star) the fastest possible (if against others), within the given amount of gas. This solo or multiplier game (up to 4 players) will guarantee a combination of stress, excitement and lots of fun!
 
-Projet scolaire réalisé dans le cadre du cours GLO-1901: Introduction à la programmation avec Python. On contrôle un vaisseau en tentant de rejoindre l'arrivée le plus vite possible, avec la quantité de gaz donnée. Possibilité de multi-joueurs en ligne jusqu'à 4. 
+## How to start
 
-P.S.: Les images n'étaient pas données, elles ont donc été crée sur Inkscape :)
+First, clone the project and install python along with the pyglet library. Then, go to the project's root folder, switch to the `new_server` branch and : 
 
-## Execution examples
-
-Go to the project's root folder. Then : 
-
-### Server
+### Start the server
 
 ```bash
 python -m server.server
 ```
 
-### Client
+### Play the game
 
-Offline :
+**Offline :**
 ```bash
 python -m client.perdu player1 -o monde2
 ```
 
-## Développement
+**Host a game online (4 players) [IN DEVELOPMENT] :**:
+```bash
+python -m client.perdu player1 -c 4 monde2
+```
 
-Le développement d'un nouveau serveur est maintenant débuté. À voir sur la branche `new_server`.
+**Join a game online (hosted by player1) [IN DEVELOPMENT] :**
+```bash
+python -m client.perdu player1 -j player1
+```
 
-## Problèmes connus
+**PS.:** All the worlds (e.g. `monde2`) must be in a correct json format and stored in the `client/mondes/` folder.
 
-### Serveur déconnecté
+## Development
 
-Bien que non-supposé, le serveur, hébergé à l'Université Laval, a été déconnecté. Il n'est donc plus possible d'y jouer. Voir la section "Futur" pour de plus amples renseignement. 
+The server is now being developped on the branch `new_server`, allowing for multiplayer games. Here's the current status :
 
-### Flickering
-
-Un effet de "flickering screen" peut être observé sur certains écrans. La cause reste encore inconnue.
-
-## Futur
-
-### Serveur maison [En cours]
-
-Afin de contourner la problématique du serveur, il serait également possible d'en créer un sois-même et de l'implenter au sein du jeu. Il deviendrait donc entièrement portable et indépendant. 
-
-## TODO
-
-* Responding to ship status update
-* Deleting server game and terminating thread when game has finished
-* Implementing the "join" command
+- [x] Offline (solo) game
+- [x] Creating (hosting) a game
+- [ ] Joining a game
+- [ ] Listing waiting games
+- [ ] Updating ships statuses

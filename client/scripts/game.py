@@ -47,7 +47,6 @@ class Game(pg.window.Window):
             width=700,
             height=700,
             caption="Perdu dans l'espace! - {}".format(pseudo),
-            config=pg.gl.Config(sample_buffers=1, samples=4),
             vsync=False)
 
         self.__client = client
