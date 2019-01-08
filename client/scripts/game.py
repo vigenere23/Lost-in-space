@@ -200,7 +200,8 @@ class Game(pg.window.Window):
             if report.get("error"):
                 raise BaseException("Une erreur est survenue...\n{}".format(report["error"]))
             elif report.get("data"):
-                report = report["data"]
+                data = report["data"]
+                report = data["statuses"]
             else:
                 raise BaseException("Une erreur inconnue est survenue...")
 

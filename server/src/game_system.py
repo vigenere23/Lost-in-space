@@ -17,6 +17,13 @@ def new_game(socket, host, nb_players, mission):
   add_player(socket, host, host)
 
 
+def remove_game(socket):
+  if _players.get(socket):
+    player = _players[socket]
+    game = player.game
+    del _games[game.host]
+
+
 def add_player(socket, host, username):
   if not _games.get(host):
     socket.send_error("The host '{}' does not host a game".format(host))
@@ -46,5 +53,16 @@ def update_status(socket, status):
   statuses = game.get_statuses()
   data = {
     "statuses": statuses
+  }
+  socket.send_data(data)
+
+def send_waiting_games(socket):
+  games = {}
+  for game in _games.values():
+    if not game.is_full():
+      games[game.host] = game.remaining_places()
+
+  data = {
+    "games": games
   }
   socket.send_data(data)

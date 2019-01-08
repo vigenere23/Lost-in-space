@@ -38,5 +38,5 @@ The server is now being developped on the branch `new_server`, allowing for mult
 - [x] Offline (solo) game
 - [x] Creating (hosting) a game
 - [x] Updating ships statuses
+- [x] Listing waiting games
 - [ ] Joining a game
-- [ ] Listing waiting games

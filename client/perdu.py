@@ -109,7 +109,17 @@ def parse_arguments(args):
         client.connect(args.server, args.port)
 
         if args.list:
-            print(client.list_games())
+            response = client.list_games()
+
+            if response.get("error"):
+                print(response["error"])
+                return
+            elif response.get("data"):
+                data = response["data"]
+                print("games : {}".format(data["games"]))
+            else:
+                print("An unknown error has occured")
+
             return
 
         elif args.join:

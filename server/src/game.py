@@ -11,6 +11,9 @@ class Game:
   def is_full(self):
     return len(self.players) == self.nb_players
 
+  def remaining_places(self):
+    return self.nb_players - len(self.players)
+
   def get_statuses(self):
     statuses = {}
     for player in self.players:

@@ -12,8 +12,7 @@ class SocketThread(threading.Thread):
       data = self.socket.recv_obj()
 
       if not data:
-        # remove user from game
-        # if host send error data?
+        gs.remove_game(self.socket)
         break
       if not data.get("command"):
         break
@@ -57,4 +56,4 @@ class SocketThread(threading.Thread):
     pass
 
   def list_games(self, data):
-    pass
+    gs.send_waiting_games(self.socket)
