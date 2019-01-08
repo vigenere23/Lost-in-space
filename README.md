@@ -38,11 +38,7 @@ Un effet de "flickering screen" peut être observé sur certains écrans. La cau
 
 ## Futur
 
-### Jeu hors-ligne
-
-Les serveur maintenant déconnectés, il n'est malheureusement plus possible de jouer au jeu. Contourner les serveurs en implantant un système hors-ligne serait un grand avantage. 
-
-### Serveur maison
+### Serveur maison [En cours]
 
 Afin de contourner la problématique du serveur, il serait également possible d'en créer un sois-même et de l'implenter au sein du jeu. Il deviendrait donc entièrement portable et indépendant. 
 

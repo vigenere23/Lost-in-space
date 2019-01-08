@@ -17,7 +17,7 @@ class Map(object):
     obstacles : list of list of list (coordonnée 2D)
         Liste des sommets de chaque polygone à afficher en temps qu'obstacles.
 
-    end_point : list (coordonnée 2D)
+    end_coord : list (coordonnée 2D)
         Point d'arrivée des vaisseaux.
 
     Attributs
@@ -41,18 +41,22 @@ class Map(object):
         Groupement (sommet, vecteur) permettant de représenter les arrêtes des
         polygones.
 
+    __end_coord : Vec2
+        Point d'arrivée.
+
     __end_point : pyglet.Sprite
         Image affichée au point d'arrivée.
     """
 
-    def __init__(self, obstacles, end_point):
+    def __init__(self, obstacles, end_coord):
         self.__polygons = obstacles
         self.__verticies_coords = ()
         self.__verticies_indexes = []
         self.__verticies_number = 0
         self.__colors = ()
         self.__edge_vectors = []
-        self.__end_point = self.init_end_point(end_point)  # pg.sprite.Sprite()
+        self.__end_coord = Vec2.from_list(end_coord)
+        self.__end_point = self.init_end_point(end_coord)  # pg.sprite.Sprite()
 
         self.__add_boundaries()
         self.__generate()
@@ -114,6 +118,13 @@ class Map(object):
         end_point = pg.sprite.Sprite(image, *end_point_coords)
         end_point.scale = 0.4
         return end_point
+
+    def is_winner(self, position):
+        print(Vec2.dist(position, self.__end_coord))
+        if Vec2.dist(position, self.__end_coord) <= 5:
+            return True
+        
+        return False
 
     def check_collision(self, delta_time, ship):
         """Vérifie s'il y a une collision avec le vaisseau.

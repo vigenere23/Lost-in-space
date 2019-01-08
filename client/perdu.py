@@ -41,48 +41,52 @@ def init_parser():
     parser.add_argument("joueur",
                         help="Pseudonyme du joueur")
 
-    parser.add_argument("--serveur",
+    parser.add_argument("--serveur", "-s",
                         metavar="adresse",
-                        default="python.gel.ulaval.ca",
+                        default="localhost",
                         help="Adresse du serveur")
 
-    parser.add_argument("--port",
+    parser.add_argument("--port", "-p",
                         metavar="numéro",
                         type=int,
-                        default=31415,
+                        default=1234,
                         help="Numéro de port du serveur")
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--créer",
+    group.add_argument("--créer", "-c",
                        metavar=("n", "fichier"),
                        nargs=2,
-                       default=(1, "monde2.json"),
+                       default=[1, "monde2.json"],
                        help="""Créer une partie de n joueurs dont la mission
                        est spécifiée dans le fichier""")
 
-    group.add_argument("--joindre",
+    group.add_argument("--joindre", "-j",
                        metavar="pseudo",
                        help="Pseudonyme de la partie à joindre")
 
-    group.add_argument("--lister",
+    group.add_argument("--lister", "-l",
                        action="store_true",
                        help="""Affiche la liste des pseudonymes des partie
                        en attente de joueurs""")
 
-    parser.add_argument("--animer",
+    parser.add_argument("--animer", "-a",
                         action="store_true",
                         help="Pour un meilleur rendu des vaisseaux ennemis")
 
-    parser.add_argument("--ralentir",
+    parser.add_argument("--ralentir", "-r",
                         action="store_true",
                         help="""Envoie des requêtes moins rapidement (Si jamais
                         vous obtenez souvent cette erreur)""")
 
-    parser.add_argument("--fps",
+    parser.add_argument("--fps", "-f",
                         metavar="frames/s",
                         type=int,
                         default=120,
                         help="Spécifie le nombre d'images par secondes")
+
+    parser.add_argument("--offline", "-o",
+                        action="store_true",
+                        help="Évite une connexion au serveur, joue solo")
 
     return parser.parse_args()
 
@@ -92,32 +96,42 @@ def parse_arguments(args):
 
     Action par défaut: --créer (1, monde2.json)
     """
-    if len(args.joueur) > 12:
-        args.joueur = "{}...".format(args.joueur[:12])
-
-    client = ClientConnection(args.joueur)
-    client.connect(args.serveur, args.port)
     game_params = None
     players = None
+    client = None
+
+    if len(args.joueur) > 12:
+        args.joueur = "{}...".format(args.joueur[:12])
+    
+    if not args.offline:
+        client = ClientConnection(args.joueur)
+        client.connect(args.serveur, args.port)
 
     if args.lister:
-        print(client.lister())
+        if not args.offline:
+            print(client.lister())
+        else:
+            print("Impossible de contacter le serveur en mode hors-ligne.")
         return
 
     elif args.joindre:
-        host_pseudo = args.joindre
-        print("\nEn attente de joueurs supplémentaires...")
+        if not args.offline:
+            host_pseudo = args.joindre
+            print("\nEn attente de joueurs supplémentaires...")
 
-        game = None
-        try:
-            print(host_pseudo)
-            game = client.joindre(host_pseudo)
-        except BaseException as exception:
-            print("\nAucune partie hébergée par {}".format(host_pseudo))
-            print(exception)
-            return
+            game = None
+            try:
+                print(host_pseudo)
+                game = client.joindre(host_pseudo)
+            except BaseException as exception:
+                print("\nAucune partie hébergée par {}".format(host_pseudo))
+                print(exception)
+                return
 
-        game_params, players = game["mission"], game["joueurs"]
+            game_params, players = game["mission"], game["joueurs"]
+
+        else:
+            print("Impossible de contacter le serveur en mode hors-ligne.")            
 
     elif args.créer:
         player_number, filename = args.créer
@@ -171,14 +185,18 @@ def parse_arguments(args):
         game_params = data
         print("\nEn attente de joueurs...")
 
-        response = client.creer(player_number, game_params)
-        print("Response:")
-        if response.get("data"):
-            print("received data...")
-            data = response["data"]
-            if data.get("players"):
-                print(data["players"])
-                start_game(client, game_params, data["players"], args)
+        if not args.offline:
+            response = client.creer(player_number, game_params)
+            print("Response:")
+            if response.get("data"):
+                print("received data...")
+                data = response["data"]
+                if data.get("players"):
+                    print(data["players"])
+                    start_game(client, game_params, data["players"], args)
+
+        else:
+            start_game(client, game_params, [args.joueur], args)
 
 
 def start_game(client, game_params, players, args):
@@ -191,7 +209,8 @@ def start_game(client, game_params, players, args):
                 *game_params,
                 animate=args.animer,
                 slow=args.ralentir,
-                fps=args.fps)
+                fps=args.fps,
+                offline=args.offline)
     game.start()
     pg.app.run()
 

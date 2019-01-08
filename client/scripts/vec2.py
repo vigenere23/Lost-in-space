@@ -15,6 +15,12 @@ class Vec2(object):
     def __init__(self, vec_x=0, vec_y=0):
         self.x, self.y = vec_x, vec_y
 
+    @classmethod
+    def from_list(cls, vec_list):
+        if len(vec_list) != 2:
+            raise ValueError("The list must have a lenght of 2")
+        return cls(vec_list[0], vec_list[1])
+
     def __str__(self):
         """Affiche un tuple de la forme (x, y)."""
         return str(tuple(self))
@@ -27,6 +33,14 @@ class Vec2(object):
         if self.x == other.x and self.y == other.y:
             return True
         return False
+
+    @classmethod
+    def dist(cls, vec1, vec2):
+        if not isinstance(vec1, Vec2) or not isinstance(vec2, Vec2):
+            raise ValueError("vecs must be of type Vec2")
+        
+        delta_vec = vec2 - vec1
+        return delta_vec.norm()
 
     def __gt__(self, other):
         """Définition du plus grand.
