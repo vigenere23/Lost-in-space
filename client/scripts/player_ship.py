@@ -33,12 +33,12 @@ class PlayerShip(Ship):
     """
 
     def __init__(self,
-                 pseudo,
+                 username,
                  image_path,
                  x, y,
                  accel, energy, ang_velocity, bounciness):
 
-        super().__init__(pseudo, image_path, x, y)
+        super().__init__(username, image_path, x, y)
 
         self.__accel = accel
         self.__energy = energy

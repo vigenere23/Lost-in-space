@@ -19,17 +19,15 @@ class ServerConnection(SocketConnection):
     return (socket, address)
 
 
-  def send_error(self, message):
+  def send_error(self, error):
     response = {
-      "type": ERROR,
-      "message": message
+      "error": error
     }
     self.send(response)
 
 
   def send_data(self, data):
     response = {
-      "type": DATA,
       "data": data
     }
     self.send(response)

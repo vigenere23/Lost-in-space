@@ -26,7 +26,7 @@ class EnergyHub(object):
         self.__begin_y = begin_y
 
         self.__text = pg.text.Label(
-            "Énergie",
+            "Energy",
             font_size=10,
             bold=True,
             x=5, y=682)

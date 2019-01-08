@@ -32,7 +32,7 @@ class WinHandler(object):
     def create_text(self):
         """Créer le texte à afficher."""
         self.__win_text = pg.text.Label(
-            "{} a gagné la partie!".format(self.__winner),
+            "{} won the game!".format(self.__winner),
             font_size=28,
             bold=True,
             anchor_x='center',
@@ -41,7 +41,7 @@ class WinHandler(object):
             y=self.__pos_y + 20)
 
         self.__press_any_keys_text = pg.text.Label(
-            "(Appuyez sur ENTER pour fermer...)",
+            "(Press ENTER to close...)",
             font_size=12,
             anchor_x='center',
             anchor_y='center',

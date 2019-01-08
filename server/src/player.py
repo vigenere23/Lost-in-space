@@ -3,3 +3,4 @@ class Player:
     self.username = username
     self.socket = socket
     self.game = game # Game
+    self.status = ()

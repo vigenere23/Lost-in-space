@@ -10,3 +10,10 @@ class Game:
 
   def is_full(self):
     return len(self.players) == self.nb_players
+
+  def get_statuses(self):
+    statuses = {}
+    for player in self.players:
+      statuses[player.username] = player.status
+
+    return statuses

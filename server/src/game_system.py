@@ -36,3 +36,15 @@ def add_player(socket, host, username):
     }
     for player in game.players:
       player.socket.send_data(data)
+
+
+def update_status(socket, status):
+  player = _players[socket]
+  player.status = status
+
+  game = player.game
+  statuses = game.get_statuses()
+  data = {
+    "statuses": statuses
+  }
+  socket.send_data(data)

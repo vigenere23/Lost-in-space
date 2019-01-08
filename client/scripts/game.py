@@ -35,25 +35,23 @@ class Game(pg.window.Window):
 
     def __init__(
             self,
-            client, pseudo, host, players,
+            client, username, host, players,
             start_pos, end_pos,
             obstacles, *ship_params,
             animate=False,
-            slow=False,
             fps=False,
             offline=False):
 
         super().__init__(
             width=700,
             height=700,
-            caption="Perdu dans l'espace! - {}".format(pseudo),
+            caption="Perdu dans l'espace! - {}".format(username),
             vsync=False)
 
         self.__client = client
-        self.__pseudo = pseudo
+        self.__username = username
         self.__host = host
         self.__animate = animate
-        self.__slow = slow
         self.__fps = fps
         self.__offline = offline
 
@@ -63,7 +61,7 @@ class Game(pg.window.Window):
         self.__win_handler = WinHandler(700, 700, self.__keys)
 
         self.__player_ship, self.__other_ships = self.init_ships(
-            pseudo, players, start_pos, ship_params)
+            username, players, start_pos, ship_params)
         self.__background = self.init_background()
 
         self.push_handlers(self.__keys)
@@ -92,7 +90,7 @@ class Game(pg.window.Window):
 
         for i, player in enumerate(players):
             image_path = fh.get_path("client/images/ship{}.png".format(i + 1))
-            if player != self.__pseudo:
+            if player != self.__username:
                 other_ships[player] = Ship(
                     player, image_path, *start_pos)
             else:
@@ -172,12 +170,12 @@ class Game(pg.window.Window):
                 for ship in self.__other_ships.values():
                     ship.update(delta_time)
             
-            rapport = None
+            report = None
             if not self.__offline:
-                rapport = self.update_server()
+                report = self.update_server()
             
-            self.update_winner(rapport)
-            self.update_positions(rapport)
+            self.update_winner(report)
+            self.update_positions(report)
         else:
             if self.__keys[key.ENTER]:
                 self.exit()
@@ -186,38 +184,37 @@ class Game(pg.window.Window):
         """Envoi les rapports au serveur et traite les données reçues."""
         time = self.__server_timer.get()
 
-        if not self.__slow and time > 0.025 or self.__slow and time > 0.05:
-            rapport = None
+        if time > 0.025:
+            report = None
             try:
                 self.__server_timer.reset()
-                rapport = self.__client.rapporter(
-                    self.__host,
-                    self.__player_ship.pseudo,
-                    self.__player_ship.get_status())
-                assert rapport is not None
+                report = self.__client.report(self.__player_ship.get_status())
 
-            except AssertionError:
-                return rapport
-
-            except BaseException:
+            except BaseException as e:
                 print("""\nLe débit des requêtes est trop élevé...
-                      \nDernière requête il y a {} secondes.
-                      \n\nSi le problème persiste, considérez utiliser la
-commande --ralentir""".format(time))
+                      \nDernière requête il y a {} secondes.""".format(time))
+                print(e)
                 self.exit()
-                return rapport
+                return None
 
-        return rapport
+            if report.get("error"):
+                raise BaseException("Une erreur est survenue...\n{}".format(report["error"]))
+            elif report.get("data"):
+                report = report["data"]
+            else:
+                raise BaseException("Une erreur inconnue est survenue...")
 
-    def update_winner(self, rapport):
-        if rapport and rapport.get("winner"):
-            self.__win_handler.set_winner(rapport["winner"])
+            return report
+
+    def update_winner(self, report):
+        if report and report.get("winner"):
+            self.__win_handler.set_winner(report["winner"])
         elif self.__map.is_winner(self.__player_ship.get_position()):
-            self.__win_handler.set_winner(self.__player_ship.pseudo)
+            self.__win_handler.set_winner(self.__player_ship.username)
 
-    def update_positions(self, rapport):
+    def update_positions(self, report):
         for player, ship in self.__other_ships.items():
-            if rapport.get(player):
-                ship.set_status(*rapport[player])
+            if report.get(player):
+                ship.set_status(*report[player])
             else:
                 ship.disappear()

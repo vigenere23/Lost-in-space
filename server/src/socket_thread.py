@@ -23,7 +23,9 @@ class SocketThread(threading.Thread):
 
       print("Received command '{}'".format(command))
 
-      if command == "create":
+      if command == "update":
+        self.update(data)
+      elif command == "create":
         self.create(data)
       elif command == "join":
         self.join(data)
@@ -32,6 +34,13 @@ class SocketThread(threading.Thread):
 
     self.socket.close()
 
+  def update(self, data):
+    if not data.get("status"):
+      self.socket.send_error("A status must be specified")
+    
+    else:
+      gs.update_status(self.socket, data["status"])
+
   def create(self, data):
     if not data.get("host"):
       self.socket.send_error("A host must be specified")
@@ -39,9 +48,10 @@ class SocketThread(threading.Thread):
       self.socket.send_error("The numbers of players is required")
     elif not data.get("mission"):
       self.socket.send_error("A mission file is required")
-    
-    print("Creating new game hosted by '{}'".format(data["host"]))
-    gs.new_game(self.socket, data["host"], data["nb_players"], data["mission"])
+
+    else:
+      print("Creating new game hosted by '{}'".format(data["host"]))
+      gs.new_game(self.socket, data["host"], data["nb_players"], data["mission"])
 
   def join(self, data):
     pass

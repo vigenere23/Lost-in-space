@@ -14,79 +14,73 @@ from .scripts.game import Game
 
 
 def init_parser():
-    """Créer et reçoit les arguments de la ligne de commande.
+    """Create and receive command line arguments.
 
-    joueur [--serveur] [--port] [--créer | --joindre | --lister] [--animer]
-    [--ralentir] [--fps]
+    username [--server] [--port] [--create | --join | --list] [--animate]
+    [--slower] [--fps]
 
-    Arguments
-    ---------
-    joueur: Pseudonyme du joueur.
+    Positional arguments
+    --------------------
+    username: Player username
 
-    --serveur: adresse du serveur (python.gel.ulaval.ca)
-    --port: numéro de port du serveur (31415)
+    Named arguments
+    ---------------
+    --server: server address (localhost)
+    --port: server port number (1234)
+    --animate: activated better enemies' ships animations
+    --fps: specify the wanted fps (120)
 
-    --créer (nombre_joueurs, monde): créer une partie (1, monde2)
-    --joindre (pseudo_hôte): joindre une partie
-    --lister: lister les parties en cours
-
-    --animer: active une animation améliorée des vaisseaux ennemis
-    --ralentir: ralenti le débit des envois au serveur
-    --fps: spécifie les fps
+    --offline (world): creates a solo offline game
+    --create (nb_players, world): create a game
+    --join (host_username): join a game hosted by `host_username`
+    --list: list waiting games
     """
     parser = argparse.ArgumentParser(
         description="Jeu 'Perdu dans l'espace!'",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument("joueur",
-                        help="Pseudonyme du joueur")
+    parser.add_argument("username",
+                        help="player username")
 
-    parser.add_argument("--serveur", "-s",
-                        metavar="adresse",
+    parser.add_argument("--server", "-s",
+                        metavar="address",
                         default="localhost",
-                        help="Adresse du serveur")
+                        help="Server address")
 
     parser.add_argument("--port", "-p",
-                        metavar="numéro",
+                        metavar="number",
                         type=int,
                         default=1234,
-                        help="Numéro de port du serveur")
+                        help="Server port number")
 
-    parser.add_argument("--animer", "-a",
+    parser.add_argument("--animate", "-a",
                         action="store_true",
-                        help="Pour un meilleur rendu des vaisseaux ennemis")
-
-    parser.add_argument("--ralentir", "-r",
-                        action="store_true",
-                        help="""Envoie des requêtes moins rapidement (Si jamais
-                        vous obtenez souvent cette erreur)""")
+                        help="Better enemies' ships animations")
 
     parser.add_argument("--fps", "-f",
                         metavar="frames/s",
                         type=int,
                         default=120,
-                        help="Spécifie le nombre d'images par secondes")
+                        help="Specify the wanted frame rate")
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--créer", "-c",
-                       metavar=("n", "fichier"),
+    group.add_argument("--create", "-c",
+                       metavar=("n", "world"),
                        nargs=2,
-                       default=[1, "monde2"],
-                       help="""Créer une partie de n joueurs dont la mission
-                       est spécifiée dans le fichier (json)""")
+                       help="""Create a game of n players with a specified mission
+                       stored in a json file named `world` (without extension)""")
 
-    group.add_argument("--joindre", "-j",
+    group.add_argument("--join", "-j",
                        metavar="pseudo",
                        help="Pseudonyme de la partie à joindre")
 
-    group.add_argument("--lister", "-l",
+    group.add_argument("--list", "-l",
                        action="store_true",
-                       help="""Affiche la liste des pseudonymes des partie
-                       en attente de joueurs""")
+                       help="Shows waiting games")
 
     group.add_argument("--offline", "-o",
                         metavar="monde",
-                        help="Jeu solo hors connexion")
+                        help="Solo offline game")
 
     return parser.parse_args()
 
@@ -97,8 +91,8 @@ def parse_arguments(args):
     Action par défaut: --créer (1, monde2)
     """
 
-    if len(args.joueur) > 12:
-        args.joueur = "{}...".format(args.joueur[:12])
+    if len(args.username) > 12:
+        args.username = "{}...".format(args.username[:12])
     
     if args.offline:
         world = args.offline
@@ -108,34 +102,34 @@ def parse_arguments(args):
             print(e)
             return
 
-        start_game(None, game_params, [args.joueur], args)
+        start_game(None, game_params, [args.username], args)
 
     else:
-        client = ClientConnection(args.joueur)
-        client.connect(args.serveur, args.port)
+        client = ClientConnection(args.username)
+        client.connect(args.server, args.port)
 
-        if args.lister:
-            print(client.lister())
+        if args.list:
+            print(client.list_games())
             return
 
-        elif args.joindre:
-            host_pseudo = args.joindre
+        elif args.join:
+            host_username = args.join
             print("\nEn attente de joueurs supplémentaires...")
 
             game = None
             try:
-                print(host_pseudo)
-                game = client.joindre(host_pseudo)
+                print(host_username)
+                game = client.join(host_username)
             except BaseException as exception:
-                print("\nAucune partie hébergée par {}".format(host_pseudo))
+                print("\nAucune partie hébergée par {}".format(host_username))
                 print(exception)
                 return
 
-            game_params, players = game["mission"], game["joueurs"]
+            game_params, players = game["mission"], game["players"]
             start_game(client, game_params, players, args)
 
-        elif args.créer:
-            player_number, world = args.créer
+        elif args.create:
+            player_number, world = args.create
             try:
                 player_number = int(player_number)
                 assert player_number > 0
@@ -154,14 +148,19 @@ def parse_arguments(args):
 
             print("\nEn attente de joueurs...")
 
-            response = client.creer(player_number, game_params)
+            response = client.create(player_number, game_params)
             print("Response:")
-            if response.get("data"):
-                print("received data...")
+            if response.get("error"):
+                print("Erreur lors de la création de la partie.")
+                print(response["error"])
+                return
+            elif response.get("data"):
                 data = response["data"]
                 if data.get("players"):
-                    print(data["players"])
                     start_game(client, game_params, data["players"], args)
+            else:
+                print("Erreur inconnue")
+                return
 
 def get_world(filename):
     try:
@@ -206,12 +205,11 @@ def start_game(client, game_params, players, args):
     """Commence la partie."""
     print("\n\nQUE LA PARTIE COMMENCE!")
     game = Game(client,
-                args.joueur,
+                args.username,
                 players[0],
                 players,
                 *game_params,
-                animate=args.animer,
-                slow=args.ralentir,
+                animate=args.animate,
                 fps=args.fps,
                 offline=args.offline)
     game.start()

@@ -16,7 +16,7 @@ class Ship(pg.sprite.Sprite):
         Position horizontale et verticale initiale du vaisseau.
     """
 
-    def __init__(self, pseudo, image_path, x, y):
+    def __init__(self, username, image_path, x, y):
 
         image = pg.image.load(image_path)
         image.anchor_x = image.width // 2  # Doit être entier
@@ -26,10 +26,10 @@ class Ship(pg.sprite.Sprite):
         self.rotation = -90
         self.scale = 0.25
         self._velocity = Vec2()
-        self.pseudo = pseudo
-        if len(pseudo) > 10:
-            pseudo = pseudo[:10] + "..."
-        self.label = pg.text.Label(pseudo,
+        self.username = username
+        if len(username) > 10:
+            username = username[:10] + "..."
+        self.label = pg.text.Label(username,
                                    font_size=10,
                                    bold=True,
                                    anchor_x='center',
