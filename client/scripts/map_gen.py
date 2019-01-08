@@ -120,7 +120,6 @@ class Map(object):
         return end_point
 
     def is_winner(self, position):
-        print(Vec2.dist(position, self.__end_coord))
         if Vec2.dist(position, self.__end_coord) <= 10:
             return True
         

@@ -96,8 +96,6 @@ def parse_arguments(args):
 
     Action par défaut: --créer (1, monde2)
     """
-    game_params = None
-    players = None
 
     if len(args.joueur) > 12:
         args.joueur = "{}...".format(args.joueur[:12])
@@ -110,37 +108,31 @@ def parse_arguments(args):
             print(e)
             return
 
-        # TODO continue loading things
+        start_game(None, game_params, [args.joueur], args)
 
     else:
         client = ClientConnection(args.joueur)
         client.connect(args.serveur, args.port)
 
         if args.lister:
-            if not args.offline:
-                print(client.lister())
-            else:
-                print("Impossible de contacter le serveur en mode hors-ligne.")
+            print(client.lister())
             return
 
         elif args.joindre:
-            if not args.offline:
-                host_pseudo = args.joindre
-                print("\nEn attente de joueurs supplémentaires...")
+            host_pseudo = args.joindre
+            print("\nEn attente de joueurs supplémentaires...")
 
-                game = None
-                try:
-                    print(host_pseudo)
-                    game = client.joindre(host_pseudo)
-                except BaseException as exception:
-                    print("\nAucune partie hébergée par {}".format(host_pseudo))
-                    print(exception)
-                    return
+            game = None
+            try:
+                print(host_pseudo)
+                game = client.joindre(host_pseudo)
+            except BaseException as exception:
+                print("\nAucune partie hébergée par {}".format(host_pseudo))
+                print(exception)
+                return
 
-                game_params, players = game["mission"], game["joueurs"]
-
-            else:
-                print("Impossible de contacter le serveur en mode hors-ligne.")            
+            game_params, players = game["mission"], game["joueurs"]
+            start_game(client, game_params, players, args)
 
         elif args.créer:
             player_number, world = args.créer
@@ -162,18 +154,14 @@ def parse_arguments(args):
 
             print("\nEn attente de joueurs...")
 
-            if not args.offline:
-                response = client.creer(player_number, game_params)
-                print("Response:")
-                if response.get("data"):
-                    print("received data...")
-                    data = response["data"]
-                    if data.get("players"):
-                        print(data["players"])
-                        start_game(client, game_params, data["players"], args)
-
-            else:
-                start_game(client, game_params, [args.joueur], args)
+            response = client.creer(player_number, game_params)
+            print("Response:")
+            if response.get("data"):
+                print("received data...")
+                data = response["data"]
+                if data.get("players"):
+                    print(data["players"])
+                    start_game(client, game_params, data["players"], args)
 
 def get_world(filename):
     try:
