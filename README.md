@@ -18,8 +18,9 @@ python -m server.server
 
 ### Client
 
+Offline :
 ```bash
-python -m client.perdu test --serveur localhost --port 1234 --créer 1 monde2.json
+python -m client.perdu player1 -o monde2
 ```
 
 ## Développement
