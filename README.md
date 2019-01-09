@@ -24,22 +24,22 @@ python -m server.server
 
 ### Playing the game
 
-**Offline :**
+**Offline**
 ```bash
 python -m client.lost player1 -o world2
 ```
 
-**List waiting games :**
+**List waiting games**
 ```bash
 python -m client.lost player1 -l
 ```
 
-**Host a game online (4 players) :**
+**Host a game online (4 players)**
 ```bash
 python -m client.lost player1 -c 4 world2
 ```
 
-**Join a game online (hosted by player1) :**
+**Join a game online (hosted by `player1`)**
 ```bash
 python -m client.lost player1 -j player1
 ```
