@@ -3,9 +3,10 @@ from . import game_system as gs
 
 
 class SocketThread(threading.Thread):
-  def __init__(self, s):
+  def __init__(self, s, args):
     super().__init__()
     self.socket = s
+    self.verbose = args.verbose
 
   def run(self):
     while True:
@@ -17,7 +18,8 @@ class SocketThread(threading.Thread):
       if not data.get("command"):
         break
 
-      print("received data : {}".format(data))
+      if self.verbose:
+        print("received data : {}".format(data))
       
       command = data["command"]
 
@@ -48,7 +50,8 @@ class SocketThread(threading.Thread):
       self.socket.send_error("A mission file is required")
 
     else:
-      print("Creating new game hosted by '{}'".format(data["host"]))
+      if self.verbose:
+        print("Creating new game hosted by '{}'".format(data["host"]))
       gs.new_game(self.socket, data["host"], data["nb_players"], data["mission"])
 
   def join(self, data):

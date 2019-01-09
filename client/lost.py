@@ -36,7 +36,7 @@ def init_parser():
     --list: list waiting games
     """
     parser = argparse.ArgumentParser(
-        description="Jeu 'Perdu dans l'espace!'",
+        description="Game 'Lost in space!'",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument("username",
