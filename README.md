@@ -34,7 +34,7 @@ python -m client.lost player1 -o world2
 python -m client.lost player1 -l
 ```
 
-**Host a game online (4 players) :**:
+**Host a game online (4 players) :**
 ```bash
 python -m client.lost player1 -c 4 world2
 ```
