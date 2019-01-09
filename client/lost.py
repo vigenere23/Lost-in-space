@@ -86,10 +86,7 @@ def init_parser():
 
 
 def parse_arguments(args):
-    """Analyse les arguments reçus par la ligne de commande.
-
-    Action par défaut: --créer (1, monde2)
-    """
+    """Analyse les arguments reçus par la ligne de commande."""
 
     if len(args.username) > 12:
         args.username = "{}...".format(args.username[:12])
@@ -174,7 +171,7 @@ def parse_arguments(args):
 
 def get_world(filename):
     try:
-        filepath = fh.get_path("client/mondes/{}.json".format(filename))
+        filepath = fh.get_path("client/worlds/{}.json".format(filename))
         data_file = open(filepath)
         content = data_file.read()
         data = json.loads(content)
@@ -184,7 +181,7 @@ def get_world(filename):
     except OSError:
         print("""\nErreur lors de la lecture du fichier...
             \nLe fichier '{}' existe-t-il?
-            \r(Doit être placé dans le dossier 'mondes/')""".format(
+            \r(Doit être placé dans le dossier 'worlds/')""".format(
                 filename
             ))
         return None
@@ -213,7 +210,7 @@ def get_world(filename):
 
 def start_game(client, game_params, players, args):
     """Commence la partie."""
-    print("\n\nQUE LA PARTIE COMMENCE!")
+    print("\n\nLet the game start!")
     game = Game(client,
                 args.username,
                 players[0],

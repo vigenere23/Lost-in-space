@@ -7,6 +7,7 @@ class Game:
     self.mission = mission
     self.players = [] # Player
     self.end_point = Vec2.from_list(mission[1])
+    self.winner = None
 
   def get_players(self):
     return [player.username for player in self.players]
@@ -24,11 +25,11 @@ class Game:
 
     return statuses
 
-  def winner(self):
-    for player in self.players:
-      if len(player.status) == 3:
-        vec_pos = Vec2.from_list(player.status[0])
-        if Vec2.dist(vec_pos, self.end_point) <= 10:
-          return player.username
-    
-    return None
+  def update_winner(self):
+    if not self.winner:
+      for player in self.players:
+        if len(player.status) == 3:
+          vec_pos = Vec2.from_list(player.status[0])
+          if Vec2.dist(vec_pos, self.end_point) <= 10:
+            self.winner = player.username
+            return

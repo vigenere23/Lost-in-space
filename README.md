@@ -16,22 +16,22 @@ python -m server.server
 
 **Offline :**
 ```bash
-python -m client.perdu player1 -o world2
+python -m client.lost player1 -o world2
 ```
 
 **List waiting games:**
 ```bash
-python -m client.perdu player1 -l
+python -m client.lost player1 -l
 ```
 
 **Host a game online (4 players) [IN DEVELOPMENT] :**:
 ```bash
-python -m client.perdu player1 -c 4 world2
+python -m client.lost player1 -c 4 world2
 ```
 
 **Join a game online (hosted by player1) [IN DEVELOPMENT] :**
 ```bash
-python -m client.perdu player1 -j player1
+python -m client.lost player1 -j player1
 ```
 
 **PS.:** All the worlds (e.g. `world2`) must be in a correct json format and stored in the `client/worlds/` folder.

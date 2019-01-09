@@ -57,10 +57,11 @@ def update_status(socket, status):
   player.status = status
 
   game = player.game
+  game.update_winner()
   statuses = game.get_statuses()
   data = {
     "statuses": statuses,
-    "winner": game.winner()
+    "winner": game.winner
   }
   socket.send_data(data)
 
