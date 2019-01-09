@@ -17,11 +17,16 @@ def new_game(socket, host, nb_players, mission):
   add_player(socket, host, host)
 
 
-def remove_game(socket):
+def remove_player(socket):
   if _players.get(socket):
     player = _players[socket]
     game = player.game
-    del _games[game.host]
+    game.players.remove(player)
+
+    if len(game.players) == 0:
+      del _games[game.host]
+
+    del _players[socket]
 
 
 def add_player(socket, host, username):

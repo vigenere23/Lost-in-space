@@ -4,7 +4,7 @@ This project was made as a school project for the course GLO-1901 : Introduction
 
 ## How to start
 
-First, clone the project and install python along with the pyglet library. Then, go to the project's root folder, switch to the `new_server` branch and : 
+First, clone the project and install python along with the pyglet library. Then, go to the project's root folder and : 
 
 ### Start the server
 
@@ -16,12 +16,17 @@ python -m server.server
 
 **Offline :**
 ```bash
-python -m client.perdu player1 -o monde2
+python -m client.perdu player1 -o world2
+```
+
+**List waiting games:**
+```bash
+python -m client.perdu player1 -l
 ```
 
 **Host a game online (4 players) [IN DEVELOPMENT] :**:
 ```bash
-python -m client.perdu player1 -c 4 monde2
+python -m client.perdu player1 -c 4 world2
 ```
 
 **Join a game online (hosted by player1) [IN DEVELOPMENT] :**
@@ -29,14 +34,4 @@ python -m client.perdu player1 -c 4 monde2
 python -m client.perdu player1 -j player1
 ```
 
-**PS.:** All the worlds (e.g. `monde2`) must be in a correct json format and stored in the `client/mondes/` folder.
-
-## Development
-
-The server is now being developped on the branch `new_server`, allowing for multiplayer games. Here's the current status :
-
-- [x] Offline (solo) game
-- [x] Creating (hosting) a game
-- [x] Updating ships statuses
-- [x] Listing waiting games
-- [ ] Joining a game
+**PS.:** All the worlds (e.g. `world2`) must be in a correct json format and stored in the `client/worlds/` folder.

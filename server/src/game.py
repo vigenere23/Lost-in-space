@@ -26,8 +26,9 @@ class Game:
 
   def winner(self):
     for player in self.players:
-      vec_pos = Vec2.from_list(player.status[0])
-      if Vec2.dist(vec_pos, self.end_point) <= 10:
-        return player.username
+      if len(player.status) == 3:
+        vec_pos = Vec2.from_list(player.status[0])
+        if Vec2.dist(vec_pos, self.end_point) <= 10:
+          return player.username
     
     return None

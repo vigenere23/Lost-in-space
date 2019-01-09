@@ -12,8 +12,8 @@ class SocketThread(threading.Thread):
       data = self.socket.recv_obj()
 
       if not data:
-        gs.remove_game(self.socket)
-        break
+        gs.remove_player(self.socket)
+        return
       if not data.get("command"):
         break
 
