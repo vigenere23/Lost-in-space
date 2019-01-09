@@ -126,17 +126,17 @@ def parse_arguments(args):
             host_username = args.join
             print("\nEn attente de joueurs supplémentaires...")
 
-            game = None
-            try:
-                print(host_username)
-                game = client.join(host_username)
-            except BaseException as exception:
-                print("\nAucune partie hébergée par {}".format(host_username))
-                print(exception)
-                return
+            response = client.join(host_username)
 
-            game_params, players = game["mission"], game["players"]
-            start_game(client, game_params, players, args)
+            if response.get("error"):
+                print(response["error"])
+                return
+            elif response.get("data"):
+                data = response["data"]
+                game_params, players = data["mission"], data["players"]
+                start_game(client, game_params, players, args)
+            else:
+                print("An unknown error has occured")
 
         elif args.create:
             player_number, world = args.create

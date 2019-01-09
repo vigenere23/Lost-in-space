@@ -171,11 +171,14 @@ class Game(pg.window.Window):
                     ship.update(delta_time)
             
             report = None
+
             if not self.__offline:
                 report = self.update_server()
+                if report:
+                    self.update_positions(report["statuses"])
             
             self.update_winner(report)
-            self.update_positions(report)
+    
         else:
             if self.__keys[key.ENTER]:
                 self.exit()
@@ -183,9 +186,9 @@ class Game(pg.window.Window):
     def update_server(self):
         """Envoi les rapports au serveur et traite les données reçues."""
         time = self.__server_timer.get()
+        report = None
 
         if time > 0.025:
-            report = None
             try:
                 self.__server_timer.reset()
                 report = self.__client.report(self.__player_ship.get_status())
@@ -200,12 +203,11 @@ class Game(pg.window.Window):
             if report.get("error"):
                 raise BaseException("Une erreur est survenue...\n{}".format(report["error"]))
             elif report.get("data"):
-                data = report["data"]
-                report = data["statuses"]
+                report = report["data"]
             else:
                 raise BaseException("Une erreur inconnue est survenue...")
 
-            return report
+        return report
 
     def update_winner(self, report):
         if report and report.get("winner"):

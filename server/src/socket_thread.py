@@ -18,9 +18,8 @@ class SocketThread(threading.Thread):
         break
 
       print("received data : {}".format(data))
+      
       command = data["command"]
-
-      print("Received command '{}'".format(command))
 
       if command == "update":
         self.update(data)
@@ -29,7 +28,7 @@ class SocketThread(threading.Thread):
       elif command == "join":
         self.join(data)
       elif command == "list":
-        self.list_games(data)
+        self.list_games()
 
     self.socket.close()
 
@@ -53,7 +52,12 @@ class SocketThread(threading.Thread):
       gs.new_game(self.socket, data["host"], data["nb_players"], data["mission"])
 
   def join(self, data):
-    pass
+    if not data.get("host"):
+      self.socket.send_error("A host must be specified")
+    elif not data.get("username"):
+      self.socket.send_error("A username must be specified")
+    else:
+      gs.add_player(self.socket, data["host"], data["username"])
 
-  def list_games(self, data):
+  def list_games(self):
     gs.send_waiting_games(self.socket)

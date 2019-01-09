@@ -3,8 +3,9 @@
 import pyglet as pg
 
 import common.file_helper as fh
+
+from common.vec2 import Vec2
 from . import polytri
-from .vec2 import Vec2
 
 
 class Map(object):

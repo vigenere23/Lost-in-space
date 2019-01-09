@@ -56,7 +56,7 @@ class ClientConnection(SocketConnection):
     """
     request = {"command": "join",
                 "host": hote,
-                "player": self.username}
+                "username": self.username}
 
     self.send(request)
     return self.recv_obj()
