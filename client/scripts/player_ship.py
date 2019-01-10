@@ -36,7 +36,10 @@ class PlayerShip(Ship):
                  username,
                  image_path,
                  x, y,
-                 accel, energy, ang_velocity, bounciness):
+                 accel=100,
+                 energy=30,
+                 ang_velocity=180,
+                 bounciness=0.9):
 
         super().__init__(username, image_path, x, y)
 

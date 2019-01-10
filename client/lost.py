@@ -215,10 +215,10 @@ def start_game(client, game_params, players, args):
                 args.username,
                 players[0],
                 players,
-                *game_params,
                 animate=args.animate,
                 fps=args.fps,
-                offline=args.offline)
+                offline=args.offline,
+                **game_params)
     game.start()
     pg.app.run()
 

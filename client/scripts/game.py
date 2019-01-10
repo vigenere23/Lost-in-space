@@ -36,11 +36,12 @@ class Game(pg.window.Window):
     def __init__(
             self,
             client, username, host, players,
-            start_pos, end_pos,
-            obstacles, *ship_params,
             animate=False,
             fps=False,
-            offline=False):
+            offline=False,
+            start_pos=[0, 0], end_pos=[0,0],
+            obstacles=[],
+            **ship_params):
 
         super().__init__(
             width=700,
@@ -95,7 +96,7 @@ class Game(pg.window.Window):
                     player, image_path, *start_pos)
             else:
                 player_ship = PlayerShip(
-                    pseudo, image_path, *start_pos, *ship_params)
+                    pseudo, image_path, *start_pos, **ship_params)
 
         return player_ship, other_ships
 
