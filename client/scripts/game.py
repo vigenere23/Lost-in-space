@@ -45,7 +45,7 @@ class Game(pg.window.Window):
         super().__init__(
             width=700,
             height=700,
-            caption="Perdu dans l'espace! - {}".format(username),
+            caption="Lost in space - {}".format(username),
             vsync=False)
 
         self.__client = client
