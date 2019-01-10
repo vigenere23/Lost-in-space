@@ -39,7 +39,8 @@ class Game(pg.window.Window):
             animate=False,
             fps=False,
             offline=False,
-            start_pos=[0, 0], end_pos=[0,0],
+            start_pos=[0, 0],
+            end_pos=[100, 100],
             obstacles=[],
             **ship_params):
 
