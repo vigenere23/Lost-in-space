@@ -15,6 +15,21 @@ def init_parser():
     help="Show some logs"
   )
 
+  parser.add_argument(
+    "--server", "-s",
+    metavar="address",
+    default="0.0.0.0",
+    help="Server's ip address to run on (localhost / 0.0.0.0)"
+  )
+
+  parser.add_argument(
+    "--port", "-p",
+    metavar="number",
+    type=int,
+    default="1234",
+    help="Server's port number"
+  )
+
   return parser.parse_args()
 
 
@@ -22,7 +37,7 @@ def main():
   args = init_parser()
 
   serversocket = ServerConnection()
-  serversocket.listen()
+  serversocket.listen(address=args.server, port=args.port)
 
   while True:
     s, _ = serversocket.accept()
