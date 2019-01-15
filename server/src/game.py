@@ -6,7 +6,7 @@ class Game:
     self.nb_players = nb_players
     self.mission = mission
     self.players = [] # Player
-    self.end_point = Vec2.from_list(mission[1])
+    self.end_point = Vec2.from_list(mission["end_pos"])
     self.winner = None
 
   def get_players(self):
