@@ -2,6 +2,8 @@
 
 This project was made as a school project for the course GLO-1901 : Introduction to programmation using Python. The goal is to control a small spaceship and reach the end (identified by a Death-Star) the fastest possible (if against others), within the given amount of gas. This solo or multiplier game (up to 4 players) will guarantee a combination of stress, excitement and lots of fun!
 
+Since the server was unplugged, I've managed to rebuild it from scratch to be able to play again!
+
 ## Installation
 
 ```bash
