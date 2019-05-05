@@ -8,7 +8,7 @@ Since the server was unplugged, I've managed to rebuild it from scratch to be ab
 
 ```bash
 git clone https://github.com/vigenere23/lost-in-space.git
-cd lost-in-space
+cd GLO-1901_Lost-in-space
 pip install -r requirements.txt
 ```
 
