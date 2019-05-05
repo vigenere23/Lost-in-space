@@ -4,6 +4,8 @@ This project was made as a school project for the course GLO-1901 : Introduction
 
 Since the server was unplugged, I've managed to rebuild it from scratch to be able to play again!
 
+![Lost in space screenshot](https://user-images.githubusercontent.com/32545895/57194913-8011e500-6f1a-11e9-8582-dcb49983ba1e.png)
+
 ## Installation
 
 ```bash
