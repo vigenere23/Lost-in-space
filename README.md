@@ -82,7 +82,7 @@ List of obstacles and theirs points (in order).
 
 Ex: 
 
-```json
+```js
 {
   // ...
   "obstacles": [
