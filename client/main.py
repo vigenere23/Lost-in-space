@@ -3,9 +3,9 @@ import pyglet as pg
 import sys
 import os
 import common.file_helper as fh
-from .scripts.client_connection import ClientConnection
-from .scripts.game import Game
-from .scripts.argparser import args
+from .src.client_connection import ClientConnection
+from .src.game import Game
+from .src.argparser import args
 
 
 def parse_commands():
