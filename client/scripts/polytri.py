@@ -1,4 +1,3 @@
-"""Triangulation of polygons."""
 from itertools import chain
 
 import numpy as np

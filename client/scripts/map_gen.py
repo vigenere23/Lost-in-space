@@ -1,5 +1,3 @@
-"""Classe permettant les manipulations reliées aux obstacles."""
-
 import pyglet as pg
 
 import common.file_helper as fh

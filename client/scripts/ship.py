@@ -1,4 +1,3 @@
-"""Définition de la classe Ship."""
 import pyglet as pg
 
 from common.vec2 import Vec2
