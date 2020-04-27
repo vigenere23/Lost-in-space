@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "serve": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./main.ts"
+  },
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-router": "^8.0.8"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.3",
+    "@types/koa-router": "^7.4.0",
+    "nodemon": "^2.0.3",
+    "ts-node": "^8.9.1",
+    "typescript": "^3.8.3"
+  }
+}
