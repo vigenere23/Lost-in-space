@@ -1,17 +1,17 @@
 import 'reflect-metadata'
 import * as Koa from 'koa'
-import * as Router from 'koa-router'
 import * as http from 'http'
 import * as socket from 'socket.io'
+import { useKoaServer, useContainer as routingUseContainer } from 'routing-controllers'
+import { Container } from 'typedi'
+
+routingUseContainer(Container)
 
 const app = new Koa()
-const router = new Router() // TODO use routing-controllers instead
 
-router.get('/', async (context) => {
-  context.body = 'Hello world!'
+useKoaServer(app, {
+  controllers: [__dirname + '/api/rest/*Controller.ts']
 })
-
-app.use(router.routes())
 
 const PORT: number = Number.parseInt(process.env.PORT) || 8080
 const HOST: string = process.env.HOST || '127.0.0.1'
@@ -21,4 +21,4 @@ const io = socket(server) // TODO use socket-controllers instead
 
 server.listen(PORT, HOST)
 
-console.log(`server running on port ${PORT}`)
+console.log(`server running at ${HOST}:${PORT}`)

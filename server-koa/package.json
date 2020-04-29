@@ -3,7 +3,9 @@
     "serve": "nodemon --watch 'src/**/*' -e ts,tsx --exec ts-node ./src/main.ts"
   },
   "dependencies": {
+    "class-validator": "^0.12.2",
     "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
     "koa-router": "^8.0.8",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1",
