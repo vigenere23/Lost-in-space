@@ -16,10 +16,8 @@ export class GameDto {
 
 @Service()
 export class GameSystem {
-    private games: Array<Game> = []
-
     constructor(
-        @Inject('GameRepository') private gameRepository: GameRepository
+        private gameRepository: GameRepository
     ) {}
 
     listGames(): Array<GameDto> {

@@ -2,7 +2,7 @@ import { Game } from '../../domain/games/game'
 import { GameRepository } from '../../domain/games/gameRepository'
 import { Service } from 'typedi'
 
-@Service('GameRepository')
+@Service()
 export class InMemoryGameRepository implements GameRepository {
     private games: Map<string, Game> = new Map()
 

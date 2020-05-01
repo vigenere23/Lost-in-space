@@ -1,8 +1,7 @@
 import { Game } from './game'
-import { Service } from 'typedi';
 
-export interface GameRepository {
-    findAllAvailableGames(): Array<Game>
+export abstract class GameRepository {
+    abstract findAllAvailableGames(): Array<Game>
     // findGameById(id: string): Array<Game>
-    addGame(game: Game): void
+    abstract addGame(game: Game): void
 }
