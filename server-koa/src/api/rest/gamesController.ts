@@ -2,8 +2,8 @@ import { JsonController, Get, Post, Body, OnUndefined } from 'routing-controller
 import { GameSystem, GameDto } from '../../application/gameSystem'
 
 
-type GameRequest = {
-    hostUsername: string,
+type CreateGameRequest = {
+    username: string,
     nbPlayers: number,
     world: string
 }
@@ -20,7 +20,7 @@ export class GamesController {
 
     @Post('/create')
     @OnUndefined(201)
-    createGame(@Body() game: GameRequest) {
-        this.gameSystem.createGame(game.hostUsername, game.nbPlayers, game.world)
+    createGame(@Body() request: CreateGameRequest) {
+        this.gameSystem.createGame(request.username, request.nbPlayers, request.world)
     }
 }

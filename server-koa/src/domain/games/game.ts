@@ -1,31 +1,19 @@
-export class GameId {
-    private constructor(private value: string) {}
-
-    static fromHostUsername(hostUsername: string): GameId {
-        return new GameId(hostUsername)
-    }
-
-    toString(): string {
-        return this.value
-    }
-
-    equals(other: GameId): boolean {
-        return this.value === other.value
-    }
-}
+import { GameId } from './gameId'
+import { Player } from '../players/player'
+import { findIndexByEquality } from '../../utils/arrayutils'
+import { Equalable } from '../../utils/equalable'
 
 
-export class Game {
+export class Game implements Equalable<Game> {
     readonly id: GameId
-    readonly isAvailable: boolean = true
+    private _isAvailable: boolean = true
     private nbPlayers: number
-    private players: Array<string> = []
+    private players: Array<Player> = []
     
     constructor(
         hostUsername: string,
         nbPlayers: number,
         private world: string
-
     ) {
         if (nbPlayers !== Math.round(nbPlayers)) {
             throw new Error("'nb_players' should be an integer")
@@ -39,5 +27,37 @@ export class Game {
 
     playersRemaining(): number {
         return this.nbPlayers - this.players.length
+    }
+
+    addPlayer(player: Player): void {
+        if (!this._isAvailable) {
+            throw new Error("the game has no room for new players")
+        }
+
+        this.players.push(player)
+        if (this.playersRemaining() === 0) {
+            this._isAvailable = false
+        }
+    }
+
+    removePlayer(player: Player, becomesAvailable: boolean = false): void {
+        const index = findIndexByEquality(this.players, player)
+        if (index === -1) {
+            throw new Error("can't remove player: not present")
+        }
+
+        this.players.splice(index, 1)
+
+        if (becomesAvailable) {
+            this._isAvailable = true
+        }
+    }
+
+    isAvailable(): boolean {
+        return this._isAvailable
+    }
+
+    equals(other: Game): boolean {
+        return this.id.equals(other.id)
     }
 }

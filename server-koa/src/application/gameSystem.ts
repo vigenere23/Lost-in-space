@@ -1,6 +1,8 @@
-import { Service, Inject } from 'typedi'
+import { Service } from 'typedi'
 import { Game } from '../domain/games/game'
+import { GameId } from '../domain/games/gameId'
 import { GameRepository } from '../domain/games/gameRepository'
+import { Player } from '../domain/players/player'
 
 
 export class GameDto {
@@ -22,12 +24,27 @@ export class GameSystem {
 
     listGames(): Array<GameDto> {
         return this.gameRepository
-            .findAllAvailableGames()
+            .findAllAvailable()
             .map(game => new GameDto(game))
     }
 
     createGame(hostUsername: string, nbPlayers: number, world: string): void {
         const game = new Game(hostUsername, nbPlayers, world)
-        this.gameRepository.addGame(game)
+        this.gameRepository.save(game)
+    }
+
+    joinGame(gameIdString: string, playerUsername: string, socketId: string) {
+        const gameId = GameId.fromString(gameIdString)
+        const game = this.gameRepository.findById(gameId)
+        const player = new Player(playerUsername, socketId)
+        
+        game.addPlayer(player)
+
+        try {
+            player.setGameId(game.id)
+        }
+        catch (e) {
+            game.removePlayer(player, true)
+        }
     }
 }

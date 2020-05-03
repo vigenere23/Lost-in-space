@@ -1,7 +1,8 @@
 import { Game } from './game'
+import { GameId } from './gameId'
 
 export abstract class GameRepository {
-    abstract findAllAvailableGames(): Array<Game>
-    // findGameById(id: string): Array<Game>
-    abstract addGame(game: Game): void
+    abstract findAllAvailable(): Array<Game>
+    abstract findById(id: GameId): Game
+    abstract save(game: Game): void
 }
