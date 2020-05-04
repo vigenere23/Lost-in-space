@@ -28,6 +28,7 @@ function createRestApp(): Koa {
     return app
 }
 
+
 function createSocketApp(server: http.Server): socket.Server {
     const io = socket(server)
     useSocketServer(io, {

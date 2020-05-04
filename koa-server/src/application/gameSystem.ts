@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io'
 import { Service } from 'typedi'
 import { Game } from '../domain/games/game'
 import { GameId } from '../domain/games/gameId'
@@ -33,7 +34,7 @@ export class GameSystem {
         this.gameRepository.save(game)
     }
 
-    joinGame(gameIdString: string, playerUsername: string, socketId: string) {
+    joinGame(gameIdString: string, playerUsername: string, socketId: string, socket: Socket): void {
         const gameId = GameId.fromString(gameIdString)
         const game = this.gameRepository.findById(gameId)
         const player = new Player(playerUsername, socketId)
@@ -45,6 +46,9 @@ export class GameSystem {
         }
         catch (e) {
             game.removePlayer(player, true)
+            throw e
         }
+
+        if (game.)
     }
 }
