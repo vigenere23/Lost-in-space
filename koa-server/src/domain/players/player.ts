@@ -1,11 +1,13 @@
 import { PlayerId } from './playerId'
 import { GameId } from '../games/gameId'
 import { Equalable } from '../../utils/equalable'
+import { Position } from '../position'
 
 
 export class Player implements Equalable<Player> {
     readonly id: PlayerId
     private gameId: GameId
+    public position: Position
 
     constructor(
         readonly username: string,

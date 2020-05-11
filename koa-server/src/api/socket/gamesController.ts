@@ -1,16 +1,12 @@
 import { Socket } from 'socket.io'
 import { SocketController, OnMessage, MessageBody, SocketId, SocketIO } from 'socket-controllers'
 import { GameSystem } from '../../application/gameSystem'
+import { PlayerInfos } from '../../domain/players/playerInfos'
 
 
 interface JoinGameRequest {
     username: string,
     gameId: string
-}
-
-interface UpdateStatusRequest {
-    position: Array<Number>,
-    angle: Number
 }
 
 
@@ -24,7 +20,7 @@ export class GamesController {
     }
 
     @OnMessage('update')
-    update(@MessageBody() request: UpdateStatusRequest, @SocketId() socketId: string, @SocketIO() socket: Socket) {
+    update(@MessageBody() request: PlayerInfos, @SocketId() socketId: string, @SocketIO() socket: Socket) {
         // TODO
     }
 }
