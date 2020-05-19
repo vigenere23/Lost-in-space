@@ -6,7 +6,8 @@
     "outDir": "./dist",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "allowJs": true
   },
   "include": [
     "./src**/*"

@@ -1,3 +1,4 @@
+import { ArgumentError } from '../exceptions'
 import { GameId } from './gameId'
 import { Player } from '../players/player'
 import { findIndexByEquality } from '../../utils/arrayutils'
@@ -16,10 +17,10 @@ export class Game implements Equalable<Game> {
         private world: string
     ) {
         if (nbPlayers !== Math.round(nbPlayers)) {
-            throw new Error("'nb_players' should be an integer")
+            throw new ArgumentError("'nb_players' should be an integer")
         }
         if (nbPlayers < 1 || nbPlayers > 4) {
-            throw new Error("'nb_players' should be between 1 and 4")
+            throw new ArgumentError("'nb_players' should be between 1 and 4")
         }
         this.id = GameId.fromHostUsername(hostUsername)
         this.nbPlayers = nbPlayers
@@ -31,7 +32,7 @@ export class Game implements Equalable<Game> {
 
     addPlayer(player: Player): void {
         if (!this._isAvailable) {
-            throw new Error("the game has no room for new players")
+            throw new ArgumentError("the game has no room for new players")
         }
 
         this.players.push(player)
@@ -43,7 +44,7 @@ export class Game implements Equalable<Game> {
     removePlayer(player: Player, becomesAvailable: boolean = false): void {
         const index = findIndexByEquality(this.players, player)
         if (index === -1) {
-            throw new Error("can't remove player: not present")
+            throw new ArgumentError("can't remove player: not present")
         }
 
         this.players.splice(index, 1)
