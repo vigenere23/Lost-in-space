@@ -5,6 +5,9 @@
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
+    "@nestjs/common": "^7.0.13",
+    "@nestjs/core": "^7.0.13",
+    "@nestjs/platform-express": "^7.0.13",
     "class-validator": "^0.12.2",
     "jest": "^25.5.2",
     "koa": "^2.11.0",
@@ -12,6 +15,7 @@
     "koa-router": "^8.0.8",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1",
+    "rxjs": "^6.5.5",
     "socket-controllers": "^0.0.5",
     "socket.io": "^2.3.0",
     "ts-jest": "^25.4.0",
