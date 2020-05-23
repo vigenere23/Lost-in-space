@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common'
 import { gameRepositoryProvider } from './gameRepositoryProvider'
+import { gamesEventEmitterProvider } from './gamesEventEmitterProvider'
 
 
 const providers = [
-    gameRepositoryProvider
+    gameRepositoryProvider,
+    gamesEventEmitterProvider
 ]
 
 @Module({

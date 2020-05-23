@@ -1,16 +1,16 @@
-import { Server, Namespace } from 'socket.io'
-import { Service } from 'typedi'
-import { EventEmitter as GamesEventEmitter } from '../../domain/events/gamesEventEmitter'
+import { Injectable } from '@nestjs/common'
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
+import { Server } from 'socket.io'
+import { GamesEventEmitter as GamesEventEmitter } from '../../domain/events/gamesEventEmitter'
 import { Player } from '../../domain/players/player'
 import { PlayerId } from '../../domain/players/playerId'
 
-@Service()
-export class SocketIoGamesEventEmitter implements GamesEventEmitter {
-    private io: Namespace
 
-    constructor(io: Server) {
-        this.io = io.of('/games')
-    }
+@Injectable()
+@WebSocketGateway(8081, { namespace: 'games' })
+export class SocketIoGamesEventEmitter implements GamesEventEmitter {
+    @WebSocketServer()
+    private io: Server
 
     sendStartGame(world: string, socketIds: Array<string>): void {
         socketIds.forEach(socketId => {
