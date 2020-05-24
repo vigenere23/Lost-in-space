@@ -8,16 +8,13 @@ import { MainModule } from './context/mainModule'
 export class NestServer {
     constructor(
         private app: INestApplication,
-        // private io: socketIO.Server,
         readonly host: string = '127.0.0.1',
         readonly port: number = 8080
-    ) {
-        // this.registerContexts(this.io)
-    }
+    ) {}
 
+    // TODO add config for adresses
     static async create(host: string = '127.0.0.1', port: number = 8080): Promise<NestServer> {
         const app = await this.createRestApp()
-        // const io = this.createSocketApp(server)
 
         return new this(app, host, port)
     }
@@ -28,7 +25,6 @@ export class NestServer {
 
     stop(): void {
         this.app.close()
-        // this.io.close()
     }
 
     address(): string {

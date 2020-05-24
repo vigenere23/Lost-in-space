@@ -1,6 +1,11 @@
+import { IsNotEmpty } from 'class-validator'
 import { Position } from '../position'
 
-export interface PlayerInfos {
-    position: Position,
+
+export class PlayerInfos {
+    @IsNotEmpty()
+    position: Position
+    
+    @IsNotEmpty()
     angle: Number
 }

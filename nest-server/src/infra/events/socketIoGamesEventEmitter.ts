@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 import { Server } from 'socket.io'
-import { GamesEventEmitter as GamesEventEmitter } from '../../domain/events/gamesEventEmitter'
+import { GamesEventEmitter } from '../../domain/events/gamesEventEmitter'
 import { Player } from '../../domain/players/player'
 import { PlayerId } from '../../domain/players/playerId'
+import { WebSocketServer, WebSocketGateway } from '@nestjs/websockets'
 
 
 @Injectable()
-@WebSocketGateway(8081, { namespace: 'games' })
+@WebSocketGateway({ namespace: 'games' })
 export class SocketIoGamesEventEmitter implements GamesEventEmitter {
     @WebSocketServer()
     private io: Server

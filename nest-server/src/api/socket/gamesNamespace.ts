@@ -3,7 +3,8 @@ import { PlayerInfos } from '../../domain/players/playerInfos'
 import { GameSystem } from '../../application/gameSystem'
 
 
-@WebSocketGateway(8081, { namespace: 'games' })
+// TODO add validation
+@WebSocketGateway({ namespace: 'games' })
 export class GamesNamespace {
     constructor(
         private gameSystem: GameSystem
@@ -11,6 +12,6 @@ export class GamesNamespace {
 
     @SubscribeMessage('updatePlayer')
     updatePlayer(@MessageBody() infos: PlayerInfos) {
-
+        console.log('IT WORKS')
     }
 }
