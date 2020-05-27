@@ -7,9 +7,12 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowJs": true
+    "allowJs": true,
+    "types": [
+      "jest"
+    ]
   },
   "include": [
-    "./src**/*"
+    "./src**/*.ts"
   ]
 }
