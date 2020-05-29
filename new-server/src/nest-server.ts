@@ -12,7 +12,7 @@ export class NestServer {
         readonly port: number = 8080
     ) {}
 
-    // TODO add config for adresses
+    // TODO add config for adresses and logger
     static async create(host = '127.0.0.1', port = 8080): Promise<NestServer> {
         const app = await this.createRestApp()
 
@@ -32,7 +32,9 @@ export class NestServer {
     }
 
     private static async createRestApp(): Promise<INestApplication> {
-        const app = await NestFactory.create<NestExpressApplication>(AppModule)
+        // TODO take from function args
+        const nestServerConfig = { logger: false }
+        const app = await NestFactory.create<NestExpressApplication>(AppModule, nestServerConfig)
         app.useGlobalPipes(new ValidationPipe())
         return app
     }

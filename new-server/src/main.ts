@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { NestServer } from './app'
+import { NestServer } from './nest-server'
 
 
 async function main() {

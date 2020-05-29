@@ -1,4 +1,4 @@
-import { setup, socket } from '../apiTest';
+import { setup, socket } from './apiTest';
 
 setup('/game')
 
