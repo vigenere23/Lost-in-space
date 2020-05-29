@@ -7,7 +7,7 @@ import { WebSocketServer, WebSocketGateway } from '@nestjs/websockets'
 
 
 @Injectable()
-@WebSocketGateway({ namespace: 'games' })
+@WebSocketGateway({ namespace: 'game' })
 export class SocketIoGameGateway implements GameGateway {
     @WebSocketServer()
     private io: Server

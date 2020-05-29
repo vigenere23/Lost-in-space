@@ -7,5 +7,5 @@ export class PlayerInfos {
     position: Position
     
     @IsNotEmpty()
-    angle: Number
+    angle: number
 }

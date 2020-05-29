@@ -7,14 +7,12 @@ import { GameSocketController } from './controllers/game.controllers.socket'
 
 
 @Module({
-    controllers: [
-        GameRestController
-    ],
-    providers: [
-        GameSocketController,
-        GameService,
-        new GameRepositoryProvider().provide(),
-        new GameGatewayProvider().provide()
-    ]
+  providers: [
+    GameSocketController,
+    GameService,
+    new GameRepositoryProvider().provide(),
+    new GameGatewayProvider().provide()
+  ],
+  controllers: [GameRestController]
 })
 export class GameModule {}

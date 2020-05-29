@@ -7,7 +7,7 @@ import { Equalable } from '../shared/equalable'
 
 export class Game implements Equalable<Game> {
     readonly id: GameId
-    private _isAvailable: boolean = true
+    private _isAvailable = true
     private nbPlayers: number
     private players: Array<Player> = []
     
@@ -41,7 +41,7 @@ export class Game implements Equalable<Game> {
         }
     }
 
-    removePlayer(player: Player, becomesAvailable: boolean = false): void {
+    removePlayer(player: Player, becomesAvailable = false): void {
         const index = findIndexByEquality(this.players, player)
         if (index === -1) {
             throw new ArgumentError("can't remove player: not present")

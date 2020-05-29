@@ -28,7 +28,7 @@ class JoinGameRequest {
 }
 
 
-@Controller('games')
+@Controller('game')
 export class GameRestController {
     constructor(
         private gameService: GameService
@@ -53,7 +53,7 @@ export class GameRestController {
             this.gameService.joinGame(gameId, username, socketId)
         }
         catch (exception ) {
-            
+            // TODO
         }
     }
 }

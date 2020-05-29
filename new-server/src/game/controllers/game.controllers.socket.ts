@@ -6,7 +6,7 @@ import { UsePipes, ValidationPipe } from '@nestjs/common'
 
 // TODO add validation
 @UsePipes(new ValidationPipe())
-@WebSocketGateway({ namespace: 'games' })
+@WebSocketGateway({ namespace: 'game' })
 export class GameSocketController {
     constructor(
         private gameService: GameService

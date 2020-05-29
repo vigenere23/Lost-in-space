@@ -1,4 +1,4 @@
 export class Position {
-    x: Number
-    y: Number
+    x: number
+    y: number
 }

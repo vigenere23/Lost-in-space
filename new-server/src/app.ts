@@ -13,7 +13,7 @@ export class NestServer {
     ) {}
 
     // TODO add config for adresses
-    static async create(host: string = '127.0.0.1', port: number = 8080): Promise<NestServer> {
+    static async create(host = '127.0.0.1', port = 8080): Promise<NestServer> {
         const app = await this.createRestApp()
 
         return new this(app, host, port)
