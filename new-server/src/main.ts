@@ -1,15 +1,12 @@
 import 'reflect-metadata'
 import { NestServer } from './nest-server'
-
+import { ConfigProvider } from './config/config.provider'
 
 async function main() {
-    const HOST = process.env.HOST
-    const PORT = Number.parseInt(process.env.PORT) || undefined
+  const server = await NestServer.create(ConfigProvider.get())
 
-    const server = await NestServer.create(HOST, PORT)
-
-    server.start()
-    console.log(`server running at ${server.address()}`)
+  server.start()
+  console.log(`server running at ${server.address()}`)
 }
 
 main()

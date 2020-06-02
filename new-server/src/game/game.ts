@@ -4,61 +4,56 @@ import { Player } from '../player/player'
 import { findIndexByEquality } from '../shared/arrayutils'
 import { Equalable } from '../shared/equalable'
 
-
 export class Game implements Equalable<Game> {
-    readonly id: GameId
-    private _isAvailable = true
-    private nbPlayers: number
-    private players: Array<Player> = []
-    
-    constructor(
-        hostUsername: string,
-        nbPlayers: number,
-        private world: string
-    ) {
-        if (nbPlayers !== Math.round(nbPlayers)) {
-            throw new ArgumentError("'nb_players' should be an integer")
-        }
-        if (nbPlayers < 1 || nbPlayers > 4) {
-            throw new ArgumentError("'nb_players' should be between 1 and 4")
-        }
-        this.id = GameId.fromHostUsername(hostUsername)
-        this.nbPlayers = nbPlayers
+  readonly id: GameId
+  private _isAvailable = true
+  private nbPlayers: number
+  private players: Array<Player> = []
+
+  constructor(hostUsername: string, nbPlayers: number, private world: string) {
+    if (nbPlayers !== Math.round(nbPlayers)) {
+      throw new ArgumentError("'nb_players' should be an integer")
+    }
+    if (nbPlayers < 1 || nbPlayers > 4) {
+      throw new ArgumentError("'nb_players' should be between 1 and 4")
+    }
+    this.id = GameId.fromHostUsername(hostUsername)
+    this.nbPlayers = nbPlayers
+  }
+
+  playersRemaining(): number {
+    return this.nbPlayers - this.players.length
+  }
+
+  addPlayer(player: Player): void {
+    if (!this._isAvailable) {
+      throw new ArgumentError('the game has no room for new players')
     }
 
-    playersRemaining(): number {
-        return this.nbPlayers - this.players.length
+    this.players.push(player)
+    if (this.playersRemaining() === 0) {
+      this._isAvailable = false
+    }
+  }
+
+  removePlayer(player: Player, becomesAvailable = false): void {
+    const index = findIndexByEquality(this.players, player)
+    if (index === -1) {
+      throw new ArgumentError("can't remove player: not present")
     }
 
-    addPlayer(player: Player): void {
-        if (!this._isAvailable) {
-            throw new ArgumentError("the game has no room for new players")
-        }
+    this.players.splice(index, 1)
 
-        this.players.push(player)
-        if (this.playersRemaining() === 0) {
-            this._isAvailable = false
-        }
+    if (becomesAvailable) {
+      this._isAvailable = true
     }
+  }
 
-    removePlayer(player: Player, becomesAvailable = false): void {
-        const index = findIndexByEquality(this.players, player)
-        if (index === -1) {
-            throw new ArgumentError("can't remove player: not present")
-        }
+  isAvailable(): boolean {
+    return this._isAvailable
+  }
 
-        this.players.splice(index, 1)
-
-        if (becomesAvailable) {
-            this._isAvailable = true
-        }
-    }
-
-    isAvailable(): boolean {
-        return this._isAvailable
-    }
-
-    equals(other: Game): boolean {
-        return this.id.equals(other.id)
-    }
+  equals(other: Game): boolean {
+    return this.id.equals(other.id)
+  }
 }

@@ -5,7 +5,6 @@ import { GameRepositoryProvider } from './repository/game.repository.provider'
 import { GameGatewayProvider } from './gateway/game.gateways.provider'
 import { GameSocketController } from './controllers/game.controllers.socket'
 
-
 @Module({
   providers: [
     GameSocketController,
