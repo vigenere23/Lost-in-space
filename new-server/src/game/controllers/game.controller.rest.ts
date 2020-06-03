@@ -6,7 +6,7 @@ class CreateGameRequest {
   @IsNotEmpty()
   username: string
 
-  @Min(1)
+  @Min(2)
   @Max(4)
   @IsInt()
   nbPlayers: number
@@ -40,6 +40,7 @@ export class GameRestController {
   async createGame(@Body() request: CreateGameRequest) {
     const { username, nbPlayers, world } = request
     this.gameService.createGame(username, nbPlayers, world)
+    return null
   }
 
   @Post()
