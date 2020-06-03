@@ -1,0 +1,30 @@
+name: Test (backend)
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./new-server
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Settuping Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    
+    - name: Installinmg dependencies
+      run: yarn
+      working-directory: ${{env.working-directory}}
+
+    - name: Unit testing
+      run: yarn test
+      working-directory: ${{env.working-directory}}
+    
+    - name: E2E testing
+      run: yarn test:e2e
+      working-directory: ${{env.working-directory}}
