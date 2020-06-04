@@ -1,5 +1,6 @@
 import * as io from 'socket.io-client'
 import axios, { AxiosInstance } from 'axios'
+import { InMemoryRepositoryCleaner } from './repository-cleaner.inmemory'
 import { NestServer } from '../../src/nest-server'
 import { ConfigProvider } from '../../src/config/config.provider'
 
@@ -8,7 +9,7 @@ export let api: AxiosInstance
 export let socket: SocketIOClient.Socket
 
 export function serverSetup(socketNamespace?: string): void {
-  beforeEach(async done => {
+  beforeAll(async done => {
     server = await NestServer.create(ConfigProvider.get())
     api = axios.create({
       baseURL: server.address()
@@ -25,7 +26,11 @@ export function serverSetup(socketNamespace?: string): void {
     }
   })
 
-  afterEach(() => {
+  beforeEach(() => {
+    InMemoryRepositoryCleaner.resetRepositories(server.app)
+  })
+
+  afterAll(() => {
     if (socket && socket.connected) {
       socket.disconnect()
     }

@@ -1,10 +1,12 @@
+import { Injectable } from '@nestjs/common'
 import { Game } from '../game'
 import { GameId } from '../gameId'
 import { GameRepository } from './game.repository'
-import { Injectable } from '@nestjs/common'
+import { InMemoryRepository } from '../../shared/repository.inmemory'
 
 @Injectable()
-export class InMemoryGameRepository implements GameRepository {
+export class InMemoryGameRepository
+  implements GameRepository, InMemoryRepository {
   private games: Map<string, Game> = new Map()
 
   findAllAvailable(): Array<Game> {
@@ -21,5 +23,9 @@ export class InMemoryGameRepository implements GameRepository {
     }
 
     this.games.set(game.id.toString(), game)
+  }
+
+  clear() {
+    this.games = new Map()
   }
 }

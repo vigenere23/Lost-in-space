@@ -6,7 +6,7 @@ import { AppModule } from './app.module'
 import { Config } from './config/config'
 
 export class NestServer {
-  constructor(private app: INestApplication, private config: Config) {}
+  constructor(readonly app: INestApplication, private config: Config) {}
 
   static async create(config: Config): Promise<NestServer> {
     const app = await this.createRestApp(config)

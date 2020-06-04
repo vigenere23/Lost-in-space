@@ -39,17 +39,13 @@ export class GameRestController {
   @HttpCode(201)
   async createGame(@Body() request: CreateGameRequest) {
     const { username, nbPlayers, world } = request
-    this.gameService.createGame(username, nbPlayers, world)
-    return null
+    return this.gameService.createGame(username, nbPlayers, world)
   }
 
-  @Post()
+  @Post('/join')
+  @HttpCode(200)
   async joinGame(@Body() request: JoinGameRequest) {
     const { gameId, username, socketId } = request
-    try {
-      this.gameService.joinGame(gameId, username, socketId)
-    } catch (exception) {
-      // TODO
-    }
+    return this.gameService.joinGame(gameId, username, socketId)
   }
 }
