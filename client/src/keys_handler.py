@@ -1,10 +1,7 @@
-"""Contient la classe KeysHandler."""
 import pyglet as pg
 
 
 class KeysHandler(pg.window.key.KeyStateHandler):
-    """Permet de gérer les appuis des touches."""
-
     def keys_pressed(self):
         """Check if a key is pressed."""
         key_is_pressed = False

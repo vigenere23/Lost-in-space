@@ -1,4 +1,3 @@
-"""Contient la classe EnergyHub."""
 import pyglet as pg
 
 

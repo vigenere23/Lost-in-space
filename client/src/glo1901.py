@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""Ce fichier contient les définitions des classes ClientReseau et Chrono."""
 import json
 import socket
 import time

@@ -1,93 +1,14 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-"""Fichier principal."""
-
 import json
-import argparse
 import pyglet as pg
 import sys
 import os
-
 import common.file_helper as fh
-from .scripts.client_connection import ClientConnection
-from .scripts.game import Game
+from .src.client_connection import ClientConnection
+from .src.game import Game
+from .src.argparser import args
 
 
-def init_parser():
-    """Create and receive command line arguments.
-
-    username [--server] [--port] [--create | --join | --list] [--animate]
-    [--slower] [--fps]
-
-    Positional arguments
-    --------------------
-    username: Player username
-
-    Named arguments
-    ---------------
-    --server: server address (localhost)
-    --port: server port number (1234)
-    --animate: activated better enemies' ships animations
-    --fps: specify the wanted fps (120)
-
-    --offline (world): creates a solo offline game
-    --create (nb_players, world): create a game
-    --join (host_username): join a game hosted by `host_username`
-    --list: list waiting games
-    """
-    parser = argparse.ArgumentParser(
-        description="Game 'Lost in space!'",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument("username",
-                        help="player username")
-
-    parser.add_argument("--server", "-s",
-                        metavar="address",
-                        default="localhost",
-                        help="Server address")
-
-    parser.add_argument("--port", "-p",
-                        metavar="number",
-                        type=int,
-                        default=1234,
-                        help="Server port number")
-
-    parser.add_argument("--animate", "-a",
-                        action="store_true",
-                        help="Better enemies' ships animations")
-
-    parser.add_argument("--fps", "-f",
-                        metavar="frames/s",
-                        type=int,
-                        default=120,
-                        help="Specify the wanted frame rate")
-
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("--create", "-c",
-                       metavar=("n", "world"),
-                       nargs=2,
-                       help="""Create a game of n players with a specified mission
-                       stored in a json file named `world` (without extension)""")
-
-    group.add_argument("--join", "-j",
-                       metavar="pseudo",
-                       help="Pseudonyme de la partie à joindre")
-
-    group.add_argument("--list", "-l",
-                       action="store_true",
-                       help="Shows waiting games")
-
-    group.add_argument("--offline", "-o",
-                        metavar="monde",
-                        help="Solo offline game")
-
-    return parser.parse_args()
-
-
-def parse_arguments(args):
-    """Analyse les arguments reçus par la ligne de commande."""
-
+def parse_commands():
     if len(args.username) > 12:
         args.username = "{}...".format(args.username[:12])
     
@@ -223,12 +144,5 @@ def start_game(client, game_params, players, args):
     pg.app.run()
 
 
-def main():
-    """Fonction principale."""
-
-    args = init_parser()
-    parse_arguments(args)
-
-
 if __name__ == "__main__":
-    main()
+    parse_commands()

@@ -1,5 +1,3 @@
-"""Définition de la classe MyWindow."""
-
 import pyglet as pg
 from pyglet.window import key
 
@@ -13,8 +11,8 @@ from .glo1901 import Chrono
 
 
 class Game(pg.window.Window):
-    """Encapsulation des fonctionnalités de base de la fenêtre (et du jeu).
-
+    """
+    # TODO OUT OF DATE
     Paramètres
     ----------
     client : ClientReseau()
@@ -57,6 +55,7 @@ class Game(pg.window.Window):
         self.__fps = fps
         self.__offline = offline
 
+        self.__winner = None
         self.__server_timer = Chrono(autostart=True)
         self.__map = Map(obstacles, end_pos)
         self.__keys = KeysHandler()
@@ -69,29 +68,26 @@ class Game(pg.window.Window):
         self.push_handlers(self.__keys)
 
     def init_ships(self, pseudo, players, start_pos, ship_params):
-        """Assigne les vaisseaux.
-
-        Paramètres
+        """
+        Parameters
         ----------
         players : list
-            Pseudonymes des joueurs.
+            Player's names
 
         start_pos : list (coordonnées 2D).
-            Position initiale des vaisseaux.
 
         ship_params : list
-            Liste des paramètres du vaisseau joueur.
 
-        Retourne
+        Returns
         --------
         tuple of pyglet.sprite.Sprite()
-            Tuple des vaisseaux (vaisseau_joueur, vaisseaux_ennemis).
+            Ship's tuples (player_ship, enemy_ships).
         """
         player_ship = None
         other_ships = {}
 
         for i, player in enumerate(players):
-            image_path = fh.get_path("client/images/ship{}.png".format(i + 1))
+            image_path = fh.get_path("client/assets/images/ship{}.png".format(i + 1))
             if player != self.__username:
                 other_ships[player] = Ship(
                     player, image_path, *start_pos)
@@ -102,38 +98,32 @@ class Game(pg.window.Window):
         return player_ship, other_ships
 
     def init_background(self):
-        """Assigne le fond d'écran.
-
-        Retourne
+        """
+        Returns
         --------
         pyglet.sprite.Sprite()
-            Sprite du fonc d'écran.
+            Background sprite
         """
-        bg_path = fh.get_path("client/images/space.jpg")
+        bg_path = fh.get_path("client/assets/images/space.jpg")
         bg_image = pg.image.load(bg_path)
         bg_image.anchor_x = bg_image.width // 2
         bg_image.anchor_y = bg_image.height // 2
-        return pg.sprite.Sprite(
-            bg_image, self.width // 2, self.height // 2)
+
+        return pg.sprite.Sprite(bg_image, self.width / 2, self.height / 2)
 
     def start(self):
-        """Débute les appels répétitifs."""
         pg.clock.schedule_interval(self.update, 1/self.__fps)
         pg.clock.set_fps_limit(self.__fps)
 
     def stop(self):
-        """Arrête les appels répétitifs."""
         pg.clock.unschedule(self.update)
 
     def exit(self):
-        """Quitte le jeu."""
         self.stop()
         pg.app.exit()
         self.close()
 
     def check_keys(self, detla_time):
-        """Vérifie l'appui de touches et appelle les fonctions associées."""
-
         if self.__keys[key.RIGHT] and not self.__keys[key.LEFT]:
             self.__player_ship.update_rotation(detla_time, clockwise=True)
         elif self.__keys[key.LEFT] and not self.__keys[key.RIGHT]:
@@ -143,10 +133,6 @@ class Game(pg.window.Window):
             self.__player_ship.update_velocity(detla_time)
 
     def on_draw(self):
-        """Regroupe les fonctions de dessin.
-
-        Appelé à chaque itération
-        """
         self.clear()
         self.__background.draw()
         self.__map.draw()
@@ -154,16 +140,16 @@ class Game(pg.window.Window):
         for ship in self.__other_ships.values():
             ship.draw()
 
-        if self.__win_handler.has_winner():
+        if self.__winner:
+            self.__win_handler.set_winner(self.__winner)
             self.__win_handler.draw()
 
     def update(self, delta_time):
-        """Regroupe les fonctions de mise-à-jour.
+        if self.__winner:
+            if self.__keys[key.ENTER]:
+                self.exit()
 
-        Appelée à toutes les detla_time secondes.
-        """
-
-        if not self.__win_handler.has_winner():
+        else:
             self.check_keys(delta_time)
             self.__map.check_collision(delta_time, self.__player_ship)
             self.__player_ship.update(delta_time)
@@ -175,18 +161,14 @@ class Game(pg.window.Window):
             report = None
 
             if not self.__offline:
+                pass
                 report = self.update_server()
                 if report:
                     self.update_positions(report["statuses"])
             
             self.update_winner(report)
-    
-        else:
-            if self.__keys[key.ENTER]:
-                self.exit()
 
     def update_server(self):
-        """Envoi les rapports au serveur et traite les données reçues."""
         time = self.__server_timer.get()
         report = None
 
@@ -212,10 +194,13 @@ class Game(pg.window.Window):
         return report
 
     def update_winner(self, report):
+        if self.__winner:
+            raise TypeError("Un gagnant a déjà été annoncé!")
+
         if report and report.get("winner"):
-            self.__win_handler.set_winner(report["winner"])
+            self.__winner = report["winner"]
         elif self.__map.is_winner(self.__player_ship.get_position()):
-            self.__win_handler.set_winner(self.__player_ship.username)
+            self.__winner = self.__player_ship.username
 
     def update_positions(self, report):
         for player, ship in self.__other_ships.items():

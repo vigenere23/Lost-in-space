@@ -1,5 +1,3 @@
-"""Classe permettant les manipulations reliées aux obstacles."""
-
 import pyglet as pg
 
 import common.file_helper as fh
@@ -112,7 +110,7 @@ class Map(object):
 
     def init_end_point(self, end_point_coords):
         """Créé l'image à la position finale."""
-        image_path = fh.get_path("client/images/death-star.png")
+        image_path = fh.get_path("client/assets/images/death-star.png")
         image = pg.image.load(image_path)
         image.anchor_x = image.width // 2  # Doit être entier
         image.anchor_y = image.height // 2
