@@ -4,6 +4,7 @@ import { GameService } from './game.service'
 import { GameRepositoryProvider } from './repository/game.repository.provider'
 import { GameGatewayProvider } from './gateway/game.gateways.provider'
 import { GameSocketController } from './controllers/game.controllers.socket'
+import { PlayerModule } from '../player/player.module'
 
 @Module({
   providers: [
@@ -12,6 +13,7 @@ import { GameSocketController } from './controllers/game.controllers.socket'
     new GameRepositoryProvider().provide(),
     new GameGatewayProvider().provide()
   ],
-  controllers: [GameRestController]
+  controllers: [GameRestController],
+  imports: [PlayerModule]
 })
 export class GameModule {}

@@ -2,7 +2,7 @@ import { Get, Controller, Post, Body, HttpCode } from '@nestjs/common'
 import { IsNotEmpty, IsInt, Min, Max } from 'class-validator'
 import { GameService } from '../game.service'
 
-class CreateGameRequest {
+export class CreateGameRequest {
   @IsNotEmpty()
   username: string
 
@@ -13,9 +13,12 @@ class CreateGameRequest {
 
   @IsNotEmpty()
   world: string
+
+  @IsNotEmpty()
+  socketId: string
 }
 
-class JoinGameRequest {
+export class JoinGameRequest {
   @IsNotEmpty()
   username: string
 
@@ -38,8 +41,8 @@ export class GameRestController {
   @Post()
   @HttpCode(201)
   async createGame(@Body() request: CreateGameRequest) {
-    const { username, nbPlayers, world } = request
-    return this.gameService.createGame(username, nbPlayers, world)
+    const { username, nbPlayers, world, socketId } = request
+    return this.gameService.createGame(username, nbPlayers, world, socketId)
   }
 
   @Post('/join')

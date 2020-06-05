@@ -25,7 +25,23 @@ export class InMemoryGameRepository
     this.games.set(game.id.toString(), game)
   }
 
+  update(game: Game): void {
+    if (!this.games.has(game.id.toString())) {
+      throw new Error(`game with id '${game.id}' does not exist`)
+    }
+
+    this.games.set(game.id.toString(), game)
+  }
+
+  delete(game: Game): void {
+    if (!this.games.has(game.id.toString())) {
+      throw new Error(`game with id '${game.id}' does not exist`)
+    }
+
+    this.games.delete(game.id.toString())
+  }
+
   clear() {
-    this.games = new Map()
+    this.games.clear()
   }
 }

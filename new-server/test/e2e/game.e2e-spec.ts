@@ -1,11 +1,24 @@
-import { serverSetup, socket, api } from './e2e-test'
 import { AxiosResponse } from 'axios'
+import { serverSetup, socket, api } from './e2e-test'
+import {
+  CreateGameRequest,
+  JoinGameRequest
+} from '../../src/game/controllers/game.controller.rest'
 
 describe('game api', () => {
   serverSetup('/game')
 
-  const CREATE_PAYLOAD_VALID = { username: 'a', nbPlayers: 2, world: 'any' }
-  const JOIN_PAYLOAD_VALID = { username: 'b', gameId: 'a', socketId: 'any' }
+  const CREATE_PAYLOAD_VALID: CreateGameRequest = {
+    username: 'a',
+    nbPlayers: 2,
+    world: 'any',
+    socketId: 'a'
+  }
+  const JOIN_PAYLOAD_VALID: JoinGameRequest = {
+    username: 'b',
+    gameId: 'a',
+    socketId: 'b'
+  }
 
   describe('when listing games', () => {
     describe('when no games were created', () => {
@@ -110,23 +123,24 @@ describe('game api', () => {
         done()
       })
 
-      // TODO
-      // describe('when username is already taken', () => {
-      //   const payload = JOIN_PAYLOAD_VALID
-      //   payload.username = payload.gameId
+      // TODO add check for username uniquness (not only socketId)
+      describe('when username is already taken', () => {
+        const payload = JOIN_PAYLOAD_VALID
+        payload.username = CREATE_PAYLOAD_VALID.username
 
-      //   it('should return an error 500', async done => {
-      //     try {
-      //       await api.post('/game/join', payload)
-      //       done(fail('an error 500 should be returned'))
-      //     } catch (exception) {
-      //       const response: AxiosResponse = exception.response
-      //       expect(response.status).toEqual(500)
-      //       expect(response.data).not.toBeNull()
-      //       done()
-      //     }
-      //   })
-      // })
+        it('should return an error 500', async done => {
+          // TODO
+          try {
+            await api.post('/game/join', payload)
+            done(fail('an error 500 should be returned'))
+          } catch (exception) {
+            const response: AxiosResponse = exception.response
+            expect(response.status).toEqual(500)
+            expect(response.data).not.toBeNull()
+            done()
+          }
+        })
+      })
 
       describe('when username is ok', () => {
         it('should return a status 200', async done => {

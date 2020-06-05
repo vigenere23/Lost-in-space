@@ -30,23 +30,22 @@ export class Game implements Equalable<Game> {
       throw new ArgumentError('the game has no room for new players')
     }
 
+    player.setGameId(this.id)
     this.players.push(player)
+
     if (this.playersRemaining() === 0) {
       this._isAvailable = false
+      // TODO send start event with this.world
     }
   }
 
-  removePlayer(player: Player, becomesAvailable = false): void {
+  removePlayer(player: Player): void {
     const index = findIndexByEquality(this.players, player)
     if (index === -1) {
       throw new ArgumentError("can't remove player: not present")
     }
 
     this.players.splice(index, 1)
-
-    if (becomesAvailable) {
-      this._isAvailable = true
-    }
   }
 
   isAvailable(): boolean {

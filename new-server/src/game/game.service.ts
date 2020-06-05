@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { Game } from './game'
 import { GameId } from './gameId'
 import { GameRepository } from './repository/game.repository'
+import { PlayerRepository } from '../player/repository/player.repository'
 import { Player } from '../player/player'
 
 export class GameDto {
@@ -16,15 +17,37 @@ export class GameDto {
 
 @Injectable()
 export class GameService {
-  constructor(private gameRepository: GameRepository) {}
+  constructor(
+    private gameRepository: GameRepository,
+    private playerRepository: PlayerRepository
+  ) {}
 
   listGames(): Array<GameDto> {
     return this.gameRepository.findAllAvailable().map(game => new GameDto(game))
   }
 
-  createGame(hostUsername: string, nbPlayers: number, world: string): void {
+  createGame(
+    hostUsername: string,
+    nbPlayers: number,
+    world: string,
+    socketId: string
+  ): void {
+    const player = new Player(hostUsername, socketId)
+    this.playerRepository.save(player)
+
     const game = new Game(hostUsername, nbPlayers, world)
-    this.gameRepository.save(game)
+
+    try {
+      this.gameRepository.save(game)
+    } catch (exception) {
+      this.playerRepository.delete(player)
+      throw exception
+    }
+
+    game.addPlayer(player)
+
+    this.gameRepository.update(game)
+    this.playerRepository.update(player)
   }
 
   joinGame(
@@ -34,17 +57,13 @@ export class GameService {
   ): void {
     const gameId = GameId.fromString(gameIdString)
     const game = this.gameRepository.findById(gameId)
+
     const player = new Player(playerUsername, socketId)
+    this.playerRepository.save(player)
 
     game.addPlayer(player)
 
-    try {
-      player.setGameId(game.id)
-    } catch (e) {
-      game.removePlayer(player, true)
-      throw e
-    }
-
-    // if (game.)
+    this.gameRepository.update(game)
+    this.playerRepository.update(player)
   }
 }
