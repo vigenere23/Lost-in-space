@@ -1,3 +1,5 @@
+import { NestApplicationOptions } from '@nestjs/common'
+
 export interface Config {
   socket: SocketConfig
   nest: NestConfig
@@ -10,5 +12,5 @@ interface SocketConfig {
 interface NestConfig {
   host: string
   port: number
-  logger: boolean
+  options: NestApplicationOptions
 }

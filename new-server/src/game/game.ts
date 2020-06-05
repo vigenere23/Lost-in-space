@@ -21,16 +21,12 @@ export class Game implements Equalable<Game> {
     this.nbPlayers = nbPlayers
   }
 
-  playersRemaining(): number {
-    return this.nbPlayers - this.players.length
-  }
-
   addPlayer(player: Player): void {
     if (!this._isAvailable) {
       throw new ArgumentError('the game has no room for new players')
     }
 
-    player.setGameId(this.id)
+    player.gameId = this.id
     this.players.push(player)
 
     if (this.playersRemaining() === 0) {
@@ -42,7 +38,9 @@ export class Game implements Equalable<Game> {
   removePlayer(player: Player): void {
     const index = findIndexByEquality(this.players, player)
     if (index === -1) {
-      throw new ArgumentError("can't remove player: not present")
+      throw new ArgumentError(
+        `can't remove player ${player.username}: not present`
+      )
     }
 
     this.players.splice(index, 1)
@@ -50,6 +48,14 @@ export class Game implements Equalable<Game> {
 
   isAvailable(): boolean {
     return this._isAvailable
+  }
+
+  playersRemaining(): number {
+    return this.nbPlayers - this.players.length
+  }
+
+  isEmpty(): boolean {
+    return this.nbPlayers === 0
   }
 
   equals(other: Game): boolean {

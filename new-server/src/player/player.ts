@@ -5,19 +5,23 @@ import { Position } from '../shared/position'
 
 export class Player implements Equalable<Player> {
   readonly id: PlayerId
-  private gameId: GameId
+  private _gameId: GameId
   public position: Position
 
   constructor(readonly username: string, socketId: string) {
     this.id = PlayerId.fromSocketId(socketId)
   }
 
-  setGameId(gameId: GameId) {
-    if (this.gameId) {
+  set gameId(gameId: GameId) {
+    if (this._gameId) {
       throw new Error('this player is already assigned to a game!')
     }
 
-    this.gameId = gameId
+    this._gameId = gameId
+  }
+
+  get gameId(): GameId {
+    return this._gameId
   }
 
   equals(other: Player): boolean {

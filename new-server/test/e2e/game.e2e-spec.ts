@@ -123,13 +123,11 @@ describe('game api', () => {
         done()
       })
 
-      // TODO add check for username uniquness (not only socketId)
       describe('when username is already taken', () => {
-        const payload = JOIN_PAYLOAD_VALID
+        const payload = { ...JOIN_PAYLOAD_VALID }
         payload.username = CREATE_PAYLOAD_VALID.username
 
         it('should return an error 500', async done => {
-          // TODO
           try {
             await api.post('/game/join', payload)
             done(fail('an error 500 should be returned'))

@@ -4,6 +4,7 @@ import { GameId } from './gameId'
 import { GameRepository } from './repository/game.repository'
 import { PlayerRepository } from '../player/repository/player.repository'
 import { Player } from '../player/player'
+import { PlayerId } from '../player/playerId'
 
 export class GameDto {
   readonly id: string
@@ -65,5 +66,27 @@ export class GameService {
 
     this.gameRepository.update(game)
     this.playerRepository.update(player)
+  }
+
+  removePlayer(socketId: string): void {
+    const playerId = PlayerId.fromSocketId(socketId)
+
+    try {
+      const player = this.playerRepository.findById(playerId)
+
+      if (player.gameId) {
+        const game = this.gameRepository.findById(player.gameId)
+        game.removePlayer(player)
+
+        if (game.isEmpty()) {
+          this.gameRepository.delete(game)
+        }
+      }
+
+      this.playerRepository.delete(player)
+    } catch (exception) {
+      // only catch player not found error
+      return
+    }
   }
 }

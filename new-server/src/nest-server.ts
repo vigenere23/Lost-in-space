@@ -29,10 +29,9 @@ export class NestServer {
   private static async createRestApp(
     config: Config
   ): Promise<INestApplication> {
-    const nestServerConfig = { logger: config.nest.logger }
     const app = await NestFactory.create<NestExpressApplication>(
       AppModule,
-      nestServerConfig
+      config.nest.options
     )
     app.useGlobalPipes(new ValidationPipe())
     return app

@@ -4,6 +4,7 @@ import { GameId } from '../gameId'
 import { GameRepository } from './game.repository'
 import { InMemoryRepository } from '../../shared/repository.inmemory'
 
+// TODO add custom exception
 @Injectable()
 export class InMemoryGameRepository
   implements GameRepository, InMemoryRepository {
@@ -13,8 +14,14 @@ export class InMemoryGameRepository
     return Array.from(this.games.values()).filter(game => game.isAvailable)
   }
 
-  findById(id: GameId) {
-    return this.games.get(id.toString())
+  findById(id: GameId): Game {
+    const game = this.games.get(id.toString())
+
+    if (!game) {
+      throw new Error(`game with id '${id}' does not exist`)
+    }
+
+    return game
   }
 
   save(game: Game): void {
